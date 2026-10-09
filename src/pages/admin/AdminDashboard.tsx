@@ -46,7 +46,7 @@ export function AdminDashboard() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
-        <div className="space-y-6">
+        <div className="min-w-0 space-y-6">
           <Panel>
             <PanelHeader
               title="Applications needing a decision"
@@ -84,31 +84,33 @@ export function AdminDashboard() {
 
           <Panel>
             <PanelHeader title="Recent enrollments" subtitle="Last five confirmed placements" />
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-line bg-surface-secondary">
-                  {['Student', 'Course', 'Cohort', 'Date'].map((h) =>
-                  <th
-                    key={h}
-                    scope="col"
-                    className="px-5 py-2.5 text-left text-xs font-semibold uppercase tracking-wide text-muted">
-                    
-                      {h}
-                    </th>
-                  )}
-                </tr>
-              </thead>
-              <tbody>
-                {recentEnrollments.map((e) =>
-                <tr key={e.id} className="border-b border-line last:border-0">
-                    <td className="px-5 py-3 font-medium text-ink">{e.student}</td>
-                    <td className="px-5 py-3 text-[13px] text-muted">{e.course}</td>
-                    <td className="px-5 py-3 text-[13px]">{e.cohort}</td>
-                    <td className="px-5 py-3 text-[13px] text-muted">{e.date}</td>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[480px] text-sm">
+                <thead>
+                  <tr className="border-b border-line bg-surface-secondary">
+                    {['Student', 'Course', 'Cohort', 'Date'].map((h) =>
+                    <th
+                      key={h}
+                      scope="col"
+                      className="px-5 py-2.5 text-left text-xs font-semibold uppercase tracking-wide text-muted">
+
+                        {h}
+                      </th>
+                    )}
                   </tr>
-                )}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {recentEnrollments.map((e) =>
+                  <tr key={e.id} className="border-b border-line last:border-0">
+                      <td className="px-5 py-3 font-medium text-ink">{e.student}</td>
+                      <td className="px-5 py-3 text-[13px] text-muted">{e.course}</td>
+                      <td className="px-5 py-3 text-[13px]">{e.cohort}</td>
+                      <td className="px-5 py-3 text-[13px] text-muted">{e.date}</td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
           </Panel>
         </div>
 

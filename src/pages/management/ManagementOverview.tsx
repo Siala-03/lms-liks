@@ -56,7 +56,7 @@ export function ManagementOverview() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
-        <Panel>
+        <Panel className="min-w-0">
           <PanelHeader
             title="Completion by course"
             subtitle="Students who finished against those enrolled"
@@ -69,40 +69,42 @@ export function ManagementOverview() {
               </Link>
             } />
           
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-line bg-surface-secondary">
-                {['Course', 'Enrolled', 'Completed', 'Rate'].map((h, i) =>
-                <th
-                  key={h}
-                  scope="col"
-                  className={`px-5 py-2.5 text-xs font-semibold uppercase tracking-wide text-muted ${
-                  i === 0 ? 'text-left' : 'text-right'}`
-                  }>
-                  
-                    {h}
-                  </th>
-                )}
-              </tr>
-            </thead>
-            <tbody>
-              {completionByCourse.map((c) =>
-              <tr key={c.code} className="border-b border-line last:border-0">
-                  <td className="px-5 py-3">
-                    <p className="font-medium text-ink">{c.course}</p>
-                    <p className="text-[13px] text-muted">{c.code}</p>
-                  </td>
-                  <td className="px-5 py-3 text-right tabular-nums">{c.enrolled}</td>
-                  <td className="px-5 py-3 text-right tabular-nums">{c.completed}</td>
-                  <td className="px-5 py-3 text-right">
-                    <Badge tone={c.rate >= 80 ? 'success' : c.rate >= 70 ? 'blue' : 'warning'}>
-                      {c.rate}%
-                    </Badge>
-                  </td>
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[480px] text-sm">
+              <thead>
+                <tr className="border-b border-line bg-surface-secondary">
+                  {['Course', 'Enrolled', 'Completed', 'Rate'].map((h, i) =>
+                  <th
+                    key={h}
+                    scope="col"
+                    className={`px-5 py-2.5 text-xs font-semibold uppercase tracking-wide text-muted ${
+                    i === 0 ? 'text-left' : 'text-right'}`
+                    }>
+
+                      {h}
+                    </th>
+                  )}
                 </tr>
-              )}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {completionByCourse.map((c) =>
+                <tr key={c.code} className="border-b border-line last:border-0">
+                    <td className="px-5 py-3">
+                      <p className="font-medium text-ink">{c.course}</p>
+                      <p className="text-[13px] text-muted">{c.code}</p>
+                    </td>
+                    <td className="px-5 py-3 text-right tabular-nums">{c.enrolled}</td>
+                    <td className="px-5 py-3 text-right tabular-nums">{c.completed}</td>
+                    <td className="px-5 py-3 text-right">
+                      <Badge tone={c.rate >= 80 ? 'success' : c.rate >= 70 ? 'blue' : 'warning'}>
+                        {c.rate}%
+                      </Badge>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </Panel>
 
         <div className="space-y-6">

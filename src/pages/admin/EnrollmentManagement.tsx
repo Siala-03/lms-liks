@@ -218,7 +218,7 @@ export function EnrollmentManagement() {
 
         <div className="space-y-4">
           <Field label="Full name" htmlFor="new-name" required>
-            <TextInput id="new-name" value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="e.g. Nneka Obi" />
+            <TextInput id="new-name" value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="e.g. Alice Wambui" />
           </Field>
           <Field label="Email" htmlFor="new-email" required>
             <TextInput
