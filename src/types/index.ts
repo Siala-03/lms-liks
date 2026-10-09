@@ -51,6 +51,7 @@ export interface Assignment {
   status: 'submitted' | 'pending' | 'graded' | 'late';
   points: number;
   score?: number;
+  feedback?: string;
 }
 
 export interface Quiz {
@@ -66,9 +67,11 @@ export interface Quiz {
 
 export interface QuizQuestion {
   id: string;
+  quizId: string;
   prompt: string;
   type: 'multiple-choice' | 'short-answer';
   options?: string[];
+  correctAnswer?: string;
 }
 
 export interface GradeRow {
@@ -81,6 +84,8 @@ export interface GradeRow {
   outOf: number;
   status: 'graded' | 'pending' | 'late';
   feedback: string;
+  assignmentId?: string;
+  quizId?: string;
 }
 
 export interface Student {

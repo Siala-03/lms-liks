@@ -3,15 +3,11 @@ import { Link } from 'react-router-dom';
 import { PlusIcon } from 'lucide-react';
 import { PageHeader } from '../../components/ui/Panel';
 import { DataTable, type Column } from '../../components/ui/DataTable';
-import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 import { Field, Select, TextInput } from '../../components/ui/Form';
 import { Modal } from '../../components/ui/Modal';
 import { useToast } from '../../components/ui/Toast';
-import { gradingQueue } from '../../data/academics';
 import { useDataStore } from '../../data/store';
-
-type Row = (typeof gradingQueue)[number];
 
 const REFERENCE_DATE = new Date('2026-09-22T00:00:00');
 
@@ -55,37 +51,33 @@ export function AssignmentQueue() {
     setNewPoints('100');
   };
 
-  const columns: Array<Column<Row>> = [
-  {
-    key: 'student',
-    header: 'Student',
-    sortable: true,
-    sortValue: (r) => r.student,
-    render: (r) => <span className="font-medium text-ink">{r.student}</span>
-  },
+  const toGrade = assignments.filter((a) => a.status === 'submitted');
+
+  const queueColumns: Array<Column<(typeof assignments)[number]>> = [
   {
     key: 'assignment',
     header: 'Assignment',
     sortable: true,
-    sortValue: (r) => r.assignment,
+    sortValue: (r) => r.title,
     render: (r) =>
     <div>
-          <p className="text-[13px] text-ink">{r.assignment}</p>
+          <p className="text-[13px] font-medium text-ink">{r.title}</p>
           <p className="mt-0.5 text-[13px] text-muted">{r.course}</p>
         </div>
 
   },
   {
-    key: 'submitted',
-    header: 'Submitted',
+    key: 'due',
+    header: 'Due',
     sortable: true,
-    sortValue: (r) => r.submitted,
-    render: (r) => <span className="text-[13px] text-muted">{r.submitted}</span>
+    sortValue: (r) => r.dueDate,
+    render: (r) => <span className="text-[13px] text-muted">{r.dueDate}</span>
   },
   {
-    key: 'flag',
-    header: 'Flag',
-    render: (r) => r.late ? <Badge tone="error">Late</Badge> : <Badge tone="grey">On time</Badge>
+    key: 'points',
+    header: 'Points',
+    align: 'right',
+    render: (r) => <span className="text-[13px]">{r.points}</span>
   },
   {
     key: 'actions',
@@ -150,9 +142,14 @@ export function AssignmentQueue() {
 
 
       <h2 className="mb-3 mt-8 text-sm font-semibold text-ink">
-        Submissions to grade ({gradingQueue.length})
+        Submissions to grade ({toGrade.length})
       </h2>
-      <DataTable columns={columns} rows={gradingQueue} rowKey={(r) => r.id} pageSize={8} />
+      <DataTable
+        columns={queueColumns}
+        rows={toGrade}
+        rowKey={(r) => r.id}
+        pageSize={8}
+        emptyMessage="Nothing waiting on you right now." />
 
       <Modal
         open={createOpen}

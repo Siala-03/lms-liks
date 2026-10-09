@@ -5,7 +5,7 @@ import { Panel, PanelHeader } from '../../components/ui/Panel';
 import { Button } from '../../components/ui/Button';
 import { Field, FileUpload, TextArea } from '../../components/ui/Form';
 import { Modal } from '../../components/ui/Modal';
-import { Badge } from '../../components/ui/Badge';
+import { Badge, statusTone } from '../../components/ui/Badge';
 import { useToast } from '../../components/ui/Toast';
 import { rubric } from '../../data/academics';
 import { useDataStore } from '../../data/store';
@@ -29,7 +29,7 @@ function useCountdown(target: Date) {
 
 export function AssignmentSubmission() {
   const { assignmentId } = useParams();
-  const { assignments } = useDataStore();
+  const { assignments, setAssignments, grades, setGrades } = useDataStore();
   const assignment = useMemo(
     () => assignments.find((a) => a.id === assignmentId) ?? assignments[0],
     [assignmentId, assignments]
@@ -40,7 +40,24 @@ export function AssignmentSubmission() {
   const [text, setText] = useState('');
   const [confirmOpen, setConfirmOpen] = useState(false);
 
+  const alreadySubmitted = assignment.status === 'submitted' || assignment.status === 'graded';
+
   const submit = () => {
+    setAssignments((prev) =>
+    prev.map((a) => a.id === assignment.id ? { ...a, status: 'submitted' } : a)
+    );
+    setGrades((prev) => {
+      const existingIndex = prev.findIndex((g) => g.assignmentId === assignment.id);
+      if (existingIndex === -1) return prev;
+      const copy = [...prev];
+      copy[existingIndex] = {
+        ...copy[existingIndex],
+        submitted: '22 Sep 2026',
+        status: 'pending',
+        feedback: 'Awaiting instructor review.'
+      };
+      return copy;
+    });
     setConfirmOpen(false);
     notify({
       tone: 'success',
@@ -59,15 +76,33 @@ export function AssignmentSubmission() {
         All assignments
       </Link>
 
-      <header className="mb-6">
-        <span className="text-xs font-semibold uppercase tracking-wider text-primary">
-          {assignment.course}
-        </span>
-        <h1 className="mt-2 text-2xl font-semibold tracking-[-0.01em] text-ink">{assignment.title}</h1>
-        <p className="mt-1 text-sm text-muted">
-          {assignment.points} points · Due {assignment.dueDate}
-        </p>
+      <header className="mb-6 flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <span className="text-xs font-semibold uppercase tracking-wider text-primary">
+            {assignment.course}
+          </span>
+          <h1 className="mt-2 text-2xl font-semibold tracking-[-0.01em] text-ink">{assignment.title}</h1>
+          <p className="mt-1 text-sm text-muted">
+            {assignment.points} points · Due {assignment.dueDate}
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Badge tone={statusTone(assignment.status)}>{assignment.status}</Badge>
+          {assignment.status === 'graded' && assignment.score !== undefined ?
+          <span className="text-lg font-semibold text-ink">
+              {assignment.score}
+              <span className="text-sm font-normal text-muted">/{assignment.points}</span>
+            </span> :
+          null}
+        </div>
       </header>
+
+      {assignment.status === 'graded' && assignment.feedback ?
+      <Panel className="mb-6 p-5">
+          <h2 className="text-sm font-semibold text-ink">Instructor feedback</h2>
+          <p className="mt-1.5 text-[13px] leading-relaxed text-ink">{assignment.feedback}</p>
+        </Panel> :
+      null}
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
         <div className="space-y-6">
@@ -112,10 +147,16 @@ export function AssignmentSubmission() {
               </Field>
             </div>
             <div className="flex items-center justify-between gap-3 border-t border-line bg-surface-secondary px-5 py-3.5">
-              <p className="text-[13px] text-muted">Draft saved automatically · 2 min ago</p>
+              <p className="text-[13px] text-muted">
+                {alreadySubmitted ? 'This assignment has already been submitted.' : 'Draft saved automatically · 2 min ago'}
+              </p>
               <div className="flex gap-2">
-                <Button variant="secondary">Save draft</Button>
-                <Button onClick={() => setConfirmOpen(true)}>Submit assignment</Button>
+                <Button variant="secondary" disabled={alreadySubmitted}>
+                  Save draft
+                </Button>
+                <Button onClick={() => setConfirmOpen(true)} disabled={alreadySubmitted}>
+                  Submit assignment
+                </Button>
               </div>
             </div>
           </Panel>

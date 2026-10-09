@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
   CheckCircle2Icon,
   ChevronLeftIcon,
@@ -14,7 +14,6 @@ import { Tabs } from '../../components/ui/Tabs';
 import { Badge, statusTone } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 import { ProgressBar } from '../../components/ui/ProgressBar';
-import { quizzes } from '../../data/academics';
 import { useDataStore } from '../../data/store';
 import { cn } from '../../utils/cn';
 import type { Lesson } from '../../types';
@@ -30,7 +29,8 @@ const LESSON_ICON: Record<Lesson['type'], React.ComponentType<{className?: strin
 
 export function CourseDetail() {
   const { courseId } = useParams();
-  const { courses, discussions, assignments } = useDataStore();
+  const navigate = useNavigate();
+  const { courses, discussions, assignments, quizzes } = useDataStore();
   const course = courses.find((c) => c.id === courseId) ?? courses[0];
   const [tab, setTab] = useState('Lessons');
   const allLessons = course.modules.flatMap((m) => m.lessons);
@@ -253,8 +253,9 @@ export function CourseDetail() {
                   <Button
                 size="sm"
                 variant={q.status === 'available' ? 'primary' : 'secondary'}
-                disabled={q.status === 'locked'}>
-                
+                disabled={q.status === 'locked'}
+                onClick={() => q.status === 'available' && navigate(`/student/quizzes/${q.id}`)}>
+
                     {q.status === 'available' ? 'Start' : q.status === 'completed' ? 'Review' : 'Locked'}
                   </Button>
                 </div>

@@ -6,25 +6,46 @@ import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 import { Field, TextArea } from '../../components/ui/Form';
 import { useToast } from '../../components/ui/Toast';
-import { gradingQueue, peerSubmission, rubric } from '../../data/academics';
+import { peerSubmission, rubric } from '../../data/academics';
+import { useDataStore } from '../../data/store';
 
 export function AssignmentReview() {
   const { submissionId } = useParams();
   const navigate = useNavigate();
   const { notify } = useToast();
-  const item = gradingQueue.find((g) => g.id === submissionId) ?? gradingQueue[0];
+  const { assignments, setAssignments, grades, setGrades } = useDataStore();
+  const item = assignments.find((a) => a.id === submissionId) ?? assignments[0];
 
-  const [scores, setScores] = useState<Record<string, string>>({ 'r-1': '26', 'r-2': '21' });
+  const [scores, setScores] = useState<Record<string, string>>({});
   const [feedback, setFeedback] = useState('');
 
   const total = rubric.reduce((sum, c) => sum + (Number(scores[c.id]) || 0), 0);
   const maxTotal = rubric.reduce((sum, c) => sum + c.max, 0);
+  const scaledScore = Math.round(total / maxTotal * item.points);
+  const allScored = rubric.every((c) => scores[c.id] !== undefined && scores[c.id] !== '');
 
   const release = () => {
+    setAssignments((prev) =>
+    prev.map((a) =>
+    a.id === item.id ? { ...a, status: 'graded', score: scaledScore, feedback: feedback.trim() } : a
+    )
+    );
+    setGrades((prev) => {
+      const existingIndex = prev.findIndex((g) => g.assignmentId === item.id);
+      if (existingIndex === -1) return prev;
+      const copy = [...prev];
+      copy[existingIndex] = {
+        ...copy[existingIndex],
+        score: scaledScore,
+        status: 'graded',
+        feedback: feedback.trim()
+      };
+      return copy;
+    });
     notify({
       tone: 'success',
       title: 'Grade released',
-      message: `${item.student} scored ${total}/${maxTotal} and has been notified.`
+      message: `${item.title} scored ${scaledScore}/${item.points} and the student has been notified.`
     });
     navigate('/instructor/assignments');
   };
@@ -44,20 +65,10 @@ export function AssignmentReview() {
           <span className="text-xs font-semibold uppercase tracking-wider text-primary">
             {item.course}
           </span>
-          <h1 className="mt-2 text-2xl font-semibold tracking-[-0.01em] text-ink">{item.assignment}</h1>
-          <p className="mt-1 text-sm text-muted">
-            {item.student} · submitted {item.submitted}
-          </p>
+          <h1 className="mt-2 text-2xl font-semibold tracking-[-0.01em] text-ink">{item.title}</h1>
+          <p className="mt-1 text-sm text-muted">Due {item.dueDate} · {item.points} points</p>
         </div>
-        <div className="flex items-center gap-2">
-          {item.late ? <Badge tone="error">Late submission</Badge> : <Badge tone="grey">On time</Badge>}
-          <Button variant="secondary" size="sm">
-            Previous
-          </Button>
-          <Button variant="secondary" size="sm">
-            Next submission
-          </Button>
-        </div>
+        <Badge tone={item.status === 'graded' ? 'success' : 'blue'}>{item.status}</Badge>
       </header>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_400px]">
@@ -140,7 +151,7 @@ export function AssignmentReview() {
             </div>
             <div className="flex items-center justify-between gap-3 border-t border-line bg-surface-secondary px-5 py-3.5">
               <Button variant="secondary">Save draft</Button>
-              <Button onClick={release} disabled={feedback.trim().length < 5}>
+              <Button onClick={release} disabled={feedback.trim().length < 5 || !allScored}>
                 Release grade
               </Button>
             </div>

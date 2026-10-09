@@ -12,14 +12,14 @@ import { Badge } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 import { ProgressBar } from '../../components/ui/ProgressBar';
 import { BarChart } from '../../components/ui/Charts';
-import { gradingQueue } from '../../data/academics';
 import { gradeBookStudents } from '../../data/analytics';
 import { useAuth } from '../../contexts/AuthContext';
 import { useDataStore } from '../../data/store';
 
 export function InstructorDashboard() {
   const { user } = useAuth();
-  const { courses } = useDataStore();
+  const { courses, assignments } = useDataStore();
+  const toGrade = assignments.filter((a) => a.status === 'submitted');
   const myCourses = courses.filter((c) => c.instructor === user?.name || c.code === 'CUL-101');
   const atRisk = gradeBookStudents.filter((s) => {
     const values = Object.values(s.scores).filter((v): v is number => v !== null);
@@ -38,7 +38,10 @@ export function InstructorDashboard() {
     <>
       <PageHeader
         title="Teaching overview"
-        subtitle={`${gradingQueue.length} submissions are waiting on you — two are already overdue for return.`}
+        subtitle={
+        toGrade.length > 0 ?
+        `${toGrade.length} submission${toGrade.length === 1 ? '' : 's'} waiting on you.` :
+        'Nothing waiting on you right now.'}
         actions={
         <Link to="/instructor/assignments">
             <Button icon={ClipboardListIcon}>Start grading</Button>
@@ -49,7 +52,7 @@ export function InstructorDashboard() {
       <div className="mb-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
         <KpiCard
           icon={ClipboardListIcon}
-          value={String(gradingQueue.length)}
+          value={String(toGrade.length)}
           label="Submissions to grade"
           emphasis />
         
@@ -73,27 +76,29 @@ export function InstructorDashboard() {
                 </Link>
               } />
             
+            {toGrade.length === 0 ?
+            <p className="px-5 py-8 text-center text-[13px] text-muted">Nothing waiting on you right now.</p> :
+
             <ul className="divide-y divide-line">
-              {gradingQueue.slice(0, 5).map((g) =>
-              <li key={g.id} className="flex flex-wrap items-center justify-between gap-4 px-5 py-3.5">
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium text-ink">{g.student}</p>
-                    <p className="mt-0.5 text-[13px] text-muted">
-                      {g.assignment} · {g.course}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    {g.late ? <Badge tone="error">Late</Badge> : null}
-                    <span className="text-[13px] text-muted">{g.submitted}</span>
-                    <Link to={`/instructor/assignments/${g.id}`}>
-                      <Button size="sm" variant="secondary">
-                        Review
-                      </Button>
-                    </Link>
-                  </div>
-                </li>
+                {toGrade.slice(0, 5).map((a) =>
+              <li key={a.id} className="flex flex-wrap items-center justify-between gap-4 px-5 py-3.5">
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-ink">{a.title}</p>
+                      <p className="mt-0.5 text-[13px] text-muted">
+                        {a.course} · Due {a.dueDate}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Link to={`/instructor/assignments/${a.id}`}>
+                        <Button size="sm" variant="secondary">
+                          Review
+                        </Button>
+                      </Link>
+                    </div>
+                  </li>
               )}
-            </ul>
+              </ul>
+            }
           </Panel>
 
           <Panel>

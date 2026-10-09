@@ -6,10 +6,11 @@ import { Badge, statusTone } from '../../components/ui/Badge';
 import { Modal } from '../../components/ui/Modal';
 import { Button } from '../../components/ui/Button';
 import { Select } from '../../components/ui/Form';
-import { grades } from '../../data/academics';
+import { useDataStore } from '../../data/store';
 import type { GradeRow } from '../../types';
 
 export function MyGrades() {
+  const { grades } = useDataStore();
   const [course, setCourse] = useState('All courses');
   const [open, setOpen] = useState<GradeRow | null>(null);
 

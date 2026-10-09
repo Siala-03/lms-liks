@@ -6,9 +6,11 @@ import { Field, TextArea } from '../../components/ui/Form';
 import { Badge } from '../../components/ui/Badge';
 import { useToast } from '../../components/ui/Toast';
 import { peerSubmission, rubric } from '../../data/academics';
+import { useDataStore } from '../../data/store';
 
 export function PeerGrading() {
   const { notify } = useToast();
+  const { peerReview, setPeerReview } = useDataStore();
   const [scores, setScores] = useState<Record<string, string>>({});
   const [comment, setComment] = useState('');
 
@@ -17,13 +19,12 @@ export function PeerGrading() {
   const complete = rubric.every((c) => scores[c.id] !== undefined && scores[c.id] !== '');
 
   const submit = () => {
+    setPeerReview({ score: total, maxScore: maxTotal, comment: comment.trim(), submittedAt: '22 Sep 2026' });
     notify({
       tone: 'success',
       title: 'Peer review submitted',
       message: `You scored this submission ${total}/${maxTotal}. Your review stays anonymous.`
     });
-    setScores({});
-    setComment('');
   };
 
   return (
@@ -40,6 +41,16 @@ export function PeerGrading() {
           the quality of your reasoning — not on how generous you are.
         </p>
       </div>
+
+      {peerReview ?
+      <Panel className="p-6 text-center">
+          <ShieldCheckIcon className="mx-auto h-8 w-8 text-success" />
+          <h2 className="mt-3 text-base font-semibold text-ink">Review submitted</h2>
+          <p className="mt-1.5 text-[13px] text-muted">
+            You scored this submission {peerReview.score}/{peerReview.maxScore} on {peerReview.submittedAt}.
+            Your review stays anonymous to the author.
+          </p>
+        </Panel> :
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_400px]">
         <Panel>
@@ -153,6 +164,7 @@ export function PeerGrading() {
           </Panel>
         </div>
       </div>
+      }
     </>);
 
 }

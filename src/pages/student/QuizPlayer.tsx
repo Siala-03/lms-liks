@@ -7,14 +7,19 @@ import { TextArea } from '../../components/ui/Form';
 import { Modal } from '../../components/ui/Modal';
 import { ProgressBar } from '../../components/ui/ProgressBar';
 import { useToast } from '../../components/ui/Toast';
-import { quizQuestions, quizzes } from '../../data/academics';
+import { quizQuestions } from '../../data/academics';
+import { useDataStore } from '../../data/store';
 import { cn } from '../../utils/cn';
+import type { GradeRow } from '../../types';
 
 export function QuizPlayer() {
   const { quizId } = useParams();
+  const { quizzes, setQuizzes, grades, setGrades } = useDataStore();
   const quiz = quizzes.find((q) => q.id === quizId) ?? quizzes[1];
   const navigate = useNavigate();
   const { notify } = useToast();
+
+  const questions = quizQuestions.filter((q) => q.quizId === quiz.id);
 
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
@@ -27,8 +32,8 @@ export function QuizPlayer() {
     return () => window.clearInterval(id);
   }, []);
 
-  const question = quizQuestions[index];
-  const total = quizQuestions.length;
+  const question = questions[index];
+  const total = questions.length;
   const answeredCount = Object.values(answers).filter((v) => v.trim().length > 0).length;
   const mins = Math.floor(secondsLeft / 60);
   const secs = secondsLeft % 60;
@@ -46,14 +51,58 @@ export function QuizPlayer() {
   };
 
   const finish = () => {
+    const correct = questions.filter((q) => q.correctAnswer && answers[q.id] === q.correctAnswer).length;
+    const scorePct = Math.round(correct / total * 100);
+
+    setQuizzes((prev) =>
+    prev.map((q) => q.id === quiz.id ? { ...q, status: 'completed', score: scorePct } : q)
+    );
+    setGrades((prev) => {
+      const existingIndex = prev.findIndex((g) => g.quizId === quiz.id);
+      const row: GradeRow = {
+        id: existingIndex >= 0 ? prev[existingIndex].id : `g-${Date.now()}`,
+        assessment: quiz.title,
+        course: quiz.course,
+        type: 'Quiz',
+        submitted: '22 Sep 2026',
+        score: scorePct,
+        outOf: 100,
+        status: 'graded',
+        feedback: `Auto-graded immediately — ${correct} of ${total} correct.`,
+        quizId: quiz.id
+      };
+      if (existingIndex >= 0) {
+        const copy = [...prev];
+        copy[existingIndex] = row;
+        return copy;
+      }
+      return [...prev, row];
+    });
+
     setSubmitOpen(false);
     notify({
       tone: 'success',
       title: 'Quiz submitted',
-      message: `${answeredCount} of ${total} questions answered. Results are available immediately.`
+      message: `${correct} of ${total} correct — scored ${scorePct}%.`
     });
     navigate('/student/quizzes');
   };
+
+  if (total === 0) {
+    return (
+      <Panel className="mx-auto max-w-xl p-8 text-center">
+        <h1 className="text-lg font-semibold text-ink">{quiz.title}</h1>
+        <p className="mt-2 text-[13px] text-muted">
+          {quiz.status === 'completed' ?
+          `You already completed this quiz and scored ${quiz.score}%.` :
+          'This quiz is not open yet.'}
+        </p>
+        <Button className="mt-5" onClick={() => navigate('/student/quizzes')}>
+          Back to quizzes
+        </Button>
+      </Panel>);
+
+  }
 
   return (
     <div className="mx-auto max-w-4xl">
@@ -160,7 +209,7 @@ export function QuizPlayer() {
             Previous
           </Button>
           <div className="flex items-center gap-1.5">
-            {quizQuestions.map((q, i) =>
+            {questions.map((q, i) =>
             <button
               key={q.id}
               type="button"

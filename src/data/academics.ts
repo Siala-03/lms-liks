@@ -18,7 +18,7 @@ export const assignments: Assignment[] = [
   courseId: 'c-101',
   dueDate: '24 Sep 2026, 17:00',
   dueIn: '2 days',
-  status: 'pending',
+  status: 'submitted',
   points: 100
 },
 {
@@ -65,63 +65,128 @@ export const assignments: Assignment[] = [
 }];
 
 
-export const gradingQueue = [
-{ id: 'gq-1', student: 'Brian Omondi', assignment: 'Sauce Emulsion Lab Report', course: 'CUL-101', submitted: '2 hours ago', late: false },
-{ id: 'gq-2', student: 'Clarisse Ingabire', assignment: 'Mise en Place Photo Log', course: 'CUL-101', submitted: '5 hours ago', late: false },
-{ id: 'gq-3', student: 'David Mwangi', assignment: 'Sauce Emulsion Lab Report', course: 'CUL-101', submitted: '1 day ago', late: true },
-{ id: 'gq-4', student: 'Joy Wanjiku', assignment: 'Service Recovery Reflection', course: 'HSP-210', submitted: '1 day ago', late: false },
-{ id: 'gq-5', student: 'Patrick Rukundo', assignment: 'Mise en Place Photo Log', course: 'CUL-101', submitted: '2 days ago', late: true },
-{ id: 'gq-6', student: 'Kevin Odhiambo', assignment: 'Wine Pairing Menu Proposal', course: 'FNB-150', submitted: '3 days ago', late: false }];
-
-
 export const quizzes: Quiz[] = [
 { id: 'q-1', title: 'Kitchen Safety & HACCP Check', course: 'CUL-101', questions: 12, timeLimitMins: 15, attemptsAllowed: 2, status: 'completed', score: 92 },
-{ id: 'q-2', title: 'Knife Cuts Identification', course: 'CUL-101', questions: 10, timeLimitMins: 12, attemptsAllowed: 2, status: 'available' },
-{ id: 'q-3', title: 'Service Recovery Scenarios', course: 'HSP-210', questions: 8, timeLimitMins: 20, attemptsAllowed: 1, status: 'available' },
+{ id: 'q-2', title: 'Knife Cuts Identification', course: 'CUL-101', questions: 5, timeLimitMins: 12, attemptsAllowed: 2, status: 'available' },
+{ id: 'q-3', title: 'Service Recovery Scenarios', course: 'HSP-210', questions: 5, timeLimitMins: 20, attemptsAllowed: 1, status: 'available' },
 { id: 'q-4', title: 'Wine Regions & Pairing', course: 'FNB-150', questions: 15, timeLimitMins: 25, attemptsAllowed: 2, status: 'completed', score: 86 },
 { id: 'q-5', title: 'Mother Sauces Final', course: 'CUL-101', questions: 20, timeLimitMins: 30, attemptsAllowed: 1, status: 'locked' }];
 
 
 export const quizQuestions: QuizQuestion[] = [
+// q-2 — Knife Cuts Identification (CUL-101)
 {
   id: 'qq-1',
+  quizId: 'q-2',
   prompt: 'A brunoise cut produces cubes of which approximate dimension?',
   type: 'multiple-choice',
-  options: ['1 mm × 1 mm × 1 mm', '3 mm × 3 mm × 3 mm', '6 mm × 6 mm × 6 mm', '12 mm × 12 mm × 12 mm']
+  options: ['1 mm × 1 mm × 1 mm', '3 mm × 3 mm × 3 mm', '6 mm × 6 mm × 6 mm', '12 mm × 12 mm × 12 mm'],
+  correctAnswer: '3 mm × 3 mm × 3 mm'
 },
 {
   id: 'qq-2',
+  quizId: 'q-2',
   prompt: 'Which cut must be completed before a brunoise can be produced?',
   type: 'multiple-choice',
-  options: ['Julienne', 'Chiffonade', 'Paysanne', 'Tourné']
+  options: ['Julienne', 'Chiffonade', 'Paysanne', 'Tourné'],
+  correctAnswer: 'Julienne'
 },
 {
   id: 'qq-3',
-  prompt: 'In two or three sentences, explain why consistency of cut size matters on a working line.',
-  type: 'short-answer'
+  quizId: 'q-2',
+  prompt: 'A chiffonade cut is used primarily on which ingredient type?',
+  type: 'multiple-choice',
+  options: ['Root vegetables', 'Leafy herbs and greens', 'Citrus fruit', 'Hard cheese'],
+  correctAnswer: 'Leafy herbs and greens'
 },
 {
   id: 'qq-4',
-  prompt: 'The safe internal holding temperature for hot food service is:',
+  quizId: 'q-2',
+  prompt: 'A tourné cut traditionally has how many faces?',
   type: 'multiple-choice',
-  options: ['45 °C or above', '52 °C or above', '63 °C or above', '78 °C or above']
+  options: ['3', '5', '7', '9'],
+  correctAnswer: '7'
 },
 {
   id: 'qq-5',
-  prompt: 'Describe the correct sequence for sanitising a cutting board between proteins.',
-  type: 'short-answer'
+  quizId: 'q-2',
+  prompt: 'Which grip keeps fingertips curled under and away from the blade?',
+  type: 'multiple-choice',
+  options: ['Pinch grip', 'Claw grip', 'Hammer grip', 'Pencil grip'],
+  correctAnswer: 'Claw grip'
+},
+// q-3 — Service Recovery Scenarios (HSP-210)
+{
+  id: 'qq-6',
+  quizId: 'q-3',
+  prompt: 'A guest complains their room was not ready at the promised check-in time. What is the best first response?',
+  type: 'multiple-choice',
+  options: [
+  'Explain that housekeeping is short-staffed today',
+  'Apologise, offer a concrete update, and propose a concrete remedy',
+  'Offer a discount immediately without further discussion',
+  'Ask the guest to wait in the lobby until notified'],
+
+  correctAnswer: 'Apologise, offer a concrete update, and propose a concrete remedy'
+},
+{
+  id: 'qq-7',
+  quizId: 'q-3',
+  prompt: 'The safe internal holding temperature for hot food service is:',
+  type: 'multiple-choice',
+  options: ['45 °C or above', '52 °C or above', '63 °C or above', '78 °C or above'],
+  correctAnswer: '63 °C or above'
+},
+{
+  id: 'qq-8',
+  quizId: 'q-3',
+  prompt: 'A guest is overheard being rude to a colleague at the next desk. What should you do?',
+  type: 'multiple-choice',
+  options: [
+  'Ignore it — it is not your guest',
+  'Quietly check in with your colleague once free and offer support',
+  'Publicly correct the guest',
+  'Report the guest to security immediately'],
+
+  correctAnswer: 'Quietly check in with your colleague once free and offer support'
+},
+{
+  id: 'qq-9',
+  quizId: 'q-3',
+  prompt: 'Which best describes the LEARN framework taught for complaint handling?',
+  type: 'multiple-choice',
+  options: [
+  'Listen, Empathise, Apologise, Resolve, Notify',
+  'Leave, Escalate, Avoid, Repeat, Notify',
+  'Listen, Explain, Argue, Refuse, Negotiate',
+  'Log, Escalate, Assign, Review, Notify'],
+
+  correctAnswer: 'Listen, Empathise, Apologise, Resolve, Notify'
+},
+{
+  id: 'qq-10',
+  quizId: 'q-3',
+  prompt: 'When should a service recovery gesture (upgrade, voucher, etc.) be offered?',
+  type: 'multiple-choice',
+  options: [
+  'Before you have understood what went wrong',
+  'Only after the guest explicitly demands compensation',
+  'After acknowledging the issue and only if it fits policy',
+  'Never — gestures should be avoided entirely'],
+
+  correctAnswer: 'After acknowledging the issue and only if it fits policy'
 }];
 
 
 export const grades: GradeRow[] = [
-{ id: 'g-1', assessment: 'Sauce Emulsion Lab Report', course: 'CUL-101', type: 'Assignment', submitted: '13 Sep 2026', score: 88, outOf: 100, status: 'graded', feedback: 'Strong technique notes. Tighten your conclusion — tie failures back to temperature control.' },
-{ id: 'g-2', assessment: 'Kitchen Safety & HACCP Check', course: 'CUL-101', type: 'Quiz', submitted: '06 Sep 2026', score: 92, outOf: 100, status: 'graded', feedback: 'Excellent. Only miss was on allergen cross-contact.' },
-{ id: 'g-3', assessment: 'Mise en Place Timed Practical', course: 'CUL-101', type: 'Practical', submitted: '—', score: null, outOf: 100, status: 'pending', feedback: 'Awaiting instructor review.' },
-{ id: 'g-4', assessment: 'Wine Pairing Menu Proposal', course: 'FNB-150', type: 'Assignment', submitted: '07 Sep 2026', score: 94, outOf: 100, status: 'graded', feedback: 'Best proposal in the cohort. Consider a non-alcoholic pairing tier.' },
-{ id: 'g-5', assessment: 'Wine Regions & Pairing', course: 'FNB-150', type: 'Quiz', submitted: '02 Sep 2026', score: 86, outOf: 100, status: 'graded', feedback: 'Review Loire Valley whites.' },
+{ id: 'g-1', assessment: 'Sauce Emulsion Lab Report', course: 'CUL-101', type: 'Assignment', submitted: '13 Sep 2026', score: 88, outOf: 100, status: 'graded', feedback: 'Strong technique notes. Tighten your conclusion — tie failures back to temperature control.', assignmentId: 'as-3' },
+{ id: 'g-2', assessment: 'Kitchen Safety & HACCP Check', course: 'CUL-101', type: 'Quiz', submitted: '06 Sep 2026', score: 92, outOf: 100, status: 'graded', feedback: 'Excellent. Only miss was on allergen cross-contact.', quizId: 'q-1' },
+{ id: 'g-3', assessment: 'Mise en Place Timed Practical', course: 'CUL-101', type: 'Practical', submitted: '21 Sep 2026', score: null, outOf: 100, status: 'pending', feedback: 'Awaiting instructor review.', assignmentId: 'as-1' },
+{ id: 'g-4', assessment: 'Wine Pairing Menu Proposal', course: 'FNB-150', type: 'Assignment', submitted: '07 Sep 2026', score: 94, outOf: 100, status: 'graded', feedback: 'Best proposal in the cohort. Consider a non-alcoholic pairing tier.', assignmentId: 'as-4' },
+{ id: 'g-5', assessment: 'Wine Regions & Pairing', course: 'FNB-150', type: 'Quiz', submitted: '02 Sep 2026', score: 86, outOf: 100, status: 'graded', feedback: 'Review Loire Valley whites.', quizId: 'q-4' },
 { id: 'g-6', assessment: 'Peer Review — Lab Report', course: 'CUL-101', type: 'Peer Review', submitted: '12 Sep 2026', score: 18, outOf: 20, status: 'graded', feedback: 'Fair, evidence-based scoring. Comments were specific and actionable.' },
-{ id: 'g-7', assessment: 'Room Inspection Scorecard', course: 'HSK-120', type: 'Assignment', submitted: '21 Sep 2026', score: null, outOf: 50, status: 'late', feedback: 'Submitted after deadline — late penalty under review.' },
-{ id: 'g-8', assessment: 'Service Recovery Reflection', course: 'HSP-210', type: 'Assignment', submitted: '—', score: null, outOf: 50, status: 'pending', feedback: 'Not yet submitted.' }];
+{ id: 'g-7', assessment: 'Room Inspection Scorecard', course: 'HSK-120', type: 'Assignment', submitted: '21 Sep 2026', score: null, outOf: 50, status: 'late', feedback: 'Submitted after deadline — late penalty under review.', assignmentId: 'as-5' },
+{ id: 'g-8', assessment: 'Service Recovery Reflection', course: 'HSP-210', type: 'Assignment', submitted: '—', score: null, outOf: 50, status: 'pending', feedback: 'Not yet submitted.', assignmentId: 'as-2' }];
 
 
 export const rubric: RubricCriterion[] = [

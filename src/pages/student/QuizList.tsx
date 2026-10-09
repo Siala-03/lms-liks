@@ -4,9 +4,10 @@ import { ClockIcon, RepeatIcon } from 'lucide-react';
 import { PageHeader, Panel, PanelHeader } from '../../components/ui/Panel';
 import { Badge, statusTone } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
-import { quizzes } from '../../data/academics';
+import { useDataStore } from '../../data/store';
 
 export function QuizList() {
+  const { quizzes } = useDataStore();
   const available = quizzes.filter((q) => q.status === 'available');
   const rest = quizzes.filter((q) => q.status !== 'available');
 
