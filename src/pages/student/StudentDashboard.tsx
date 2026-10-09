@@ -11,12 +11,13 @@ import { PageHeader, Panel, PanelHeader } from '../../components/ui/Panel';
 import { ProgressBar } from '../../components/ui/ProgressBar';
 import { Badge, statusTone } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
-import { courses } from '../../data/courses';
-import { assignments, grades, notifications } from '../../data/academics';
+import { grades } from '../../data/academics';
 import { useAuth } from '../../contexts/AuthContext';
+import { useDataStore } from '../../data/store';
 
 export function StudentDashboard() {
   const { user } = useAuth();
+  const { courses, notifications, assignments } = useDataStore();
   const active = courses.filter((c) => c.status === 'in-progress' || c.status === 'completed');
   const upcoming = assignments.filter((a) => a.status === 'pending' || a.status === 'late');
   const recentGrades = grades.filter((g) => g.status === 'graded').slice(0, 4);

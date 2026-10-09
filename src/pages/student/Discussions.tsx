@@ -1,27 +1,84 @@
 import React, { useState } from 'react';
-import { PinIcon, PlusIcon, ReplyIcon } from 'lucide-react';
+import { PinIcon, PlusIcon } from 'lucide-react';
 import { PageHeader, Panel, PanelHeader } from '../../components/ui/Panel';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 import { Field, Select, TextArea, TextInput } from '../../components/ui/Form';
 import { Modal } from '../../components/ui/Modal';
 import { useToast } from '../../components/ui/Toast';
-import { discussions } from '../../data/academics';
-import { courses } from '../../data/courses';
+import { useAuth, ROLE_LABEL } from '../../contexts/AuthContext';
+import { useDataStore } from '../../data/store';
 import { cn } from '../../utils/cn';
 
 export function Discussions() {
   const { notify } = useToast();
+  const { user } = useAuth();
+  const { discussions, setDiscussions, courses } = useDataStore();
   const [activeId, setActiveId] = useState(discussions[0].id);
   const [reply, setReply] = useState('');
   const [newOpen, setNewOpen] = useState(false);
+  const [newCourse, setNewCourse] = useState(courses[0]?.code ?? '');
+  const [newTitle, setNewTitle] = useState('');
+  const [newBody, setNewBody] = useState('');
 
   const thread = discussions.find((d) => d.id === activeId) ?? discussions[0];
 
   const postReply = () => {
-    if (!reply.trim()) return;
+    if (!reply.trim() || !user) return;
+    setDiscussions((prev) =>
+    prev.map((d) =>
+    d.id === thread.id ?
+    {
+      ...d,
+      replies: [
+      ...d.replies,
+      {
+        id: `dr-${Date.now()}`,
+        author: user.name,
+        authorInitials: user.avatarInitials,
+        role: ROLE_LABEL[user.role],
+        createdAt: 'Just now',
+        body: reply.trim()
+      }]
+
+    } :
+    d
+    )
+    );
     notify({ tone: 'success', title: 'Reply posted', message: 'Your reply is visible to the course.' });
     setReply('');
+  };
+
+  const postThread = () => {
+    if (!newTitle.trim() || !newBody.trim() || !user) return;
+    const id = `d-${Date.now()}`;
+    setDiscussions((prev) => [
+    {
+      id,
+      title: newTitle.trim(),
+      course: newCourse,
+      author: user.name,
+      authorInitials: user.avatarInitials,
+      createdAt: 'Just now',
+      pinned: false,
+      replies: [
+      {
+        id: `dr-${Date.now()}`,
+        author: user.name,
+        authorInitials: user.avatarInitials,
+        role: ROLE_LABEL[user.role],
+        createdAt: 'Just now',
+        body: newBody.trim()
+      }]
+
+    },
+    ...prev]
+    );
+    setActiveId(id);
+    setNewOpen(false);
+    setNewTitle('');
+    setNewBody('');
+    notify({ tone: 'success', title: 'Thread created', message: 'Your thread is now live.' });
   };
 
   return (
@@ -100,13 +157,6 @@ export function Discussions() {
                     <span className="text-xs text-muted">{r.createdAt}</span>
                   </div>
                   <p className="mt-1.5 text-[15px] leading-7 text-ink">{r.body}</p>
-                  <button
-                  type="button"
-                  className="mt-2 inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:underline">
-                  
-                    <ReplyIcon className="h-3.5 w-3.5" />
-                    Reply
-                  </button>
                 </div>
               </li>
             )}
@@ -141,34 +191,35 @@ export function Discussions() {
             <Button variant="secondary" onClick={() => setNewOpen(false)}>
               Cancel
             </Button>
-            <Button
-            onClick={() => {
-              setNewOpen(false);
-              notify({ tone: 'success', title: 'Thread created', message: 'Your thread is now live.' });
-            }}>
-            
+            <Button onClick={postThread} disabled={!newTitle.trim() || !newBody.trim()}>
               Post thread
             </Button>
           </>
         }>
-        
+
         <div className="space-y-4">
           <Field label="Course" htmlFor="thread-course" required>
-            <Select id="thread-course">
+            <Select id="thread-course" value={newCourse} onChange={(e) => setNewCourse(e.target.value)}>
               {courses.
               filter((c) => c.status !== 'archived').
               map((c) =>
-              <option key={c.id}>
+              <option key={c.id} value={c.code}>
                     {c.code} · {c.title}
                   </option>
               )}
             </Select>
           </Field>
           <Field label="Title" htmlFor="thread-title" required>
-            <TextInput id="thread-title" placeholder="What is your question?" />
+            <TextInput id="thread-title" value={newTitle} onChange={(e) => setNewTitle(e.target.value)} placeholder="What is your question?" />
           </Field>
           <Field label="Message" htmlFor="thread-body" required>
-            <TextArea id="thread-body" rows={5} placeholder="Give enough detail to get a useful answer…" />
+            <TextArea
+              id="thread-body"
+              rows={5}
+              value={newBody}
+              onChange={(e) => setNewBody(e.target.value)}
+              placeholder="Give enough detail to get a useful answer…" />
+
           </Field>
         </div>
       </Modal>

@@ -4,10 +4,11 @@ import { PageHeader } from '../../components/ui/Panel';
 import { DataTable, type Column } from '../../components/ui/DataTable';
 import { Badge, statusTone } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
-import { assignments } from '../../data/academics';
+import { useDataStore } from '../../data/store';
 import type { Assignment } from '../../types';
 
 export function AssignmentList() {
+  const { assignments } = useDataStore();
   const columns: Array<Column<Assignment>> = [
   {
     key: 'title',

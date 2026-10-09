@@ -4,7 +4,8 @@ import { PageHeader, Panel, PanelHeader } from '../../components/ui/Panel';
 import { Button } from '../../components/ui/Button';
 import { Select } from '../../components/ui/Form';
 import { useToast } from '../../components/ui/Toast';
-import { attendanceRoster, attendanceSessions } from '../../data/academics';
+import { attendanceSessions } from '../../data/academics';
+import { useDataStore } from '../../data/store';
 import { cn } from '../../utils/cn';
 import type { AttendanceRecord } from '../../types';
 
@@ -21,8 +22,8 @@ const OPTIONS: Array<{
 
 export function Attendance() {
   const { notify } = useToast();
+  const { attendanceRoster: roster, setAttendanceRoster: setRoster } = useDataStore();
   const [session, setSession] = useState(attendanceSessions[0].id);
-  const [roster, setRoster] = useState<AttendanceRecord[]>(attendanceRoster);
 
   const counts = {
     present: roster.filter((r) => r.status === 'present').length,

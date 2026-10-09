@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
+import { DataStoreProvider } from './data/store';
 import { ToastProvider } from './components/ui/Toast';
 import { AppLayout } from './components/layout/AppLayout';
 import { Login } from './pages/Login';
@@ -46,6 +47,7 @@ import { PerformanceReport } from './pages/management/PerformanceReport';
 export function App() {
   return (
     <AuthProvider>
+      <DataStoreProvider>
       <ToastProvider>
         <BrowserRouter>
           <Routes>
@@ -103,6 +105,7 @@ export function App() {
           </Routes>
         </BrowserRouter>
       </ToastProvider>
+      </DataStoreProvider>
     </AuthProvider>);
 
 }

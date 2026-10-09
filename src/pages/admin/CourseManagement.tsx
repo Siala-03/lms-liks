@@ -7,13 +7,64 @@ import { Button } from '../../components/ui/Button';
 import { Field, Select, TextInput } from '../../components/ui/Form';
 import { Modal } from '../../components/ui/Modal';
 import { useToast } from '../../components/ui/Toast';
-import { courses } from '../../data/courses';
+import { useDataStore } from '../../data/store';
 import type { Course } from '../../types';
+
+const DEPARTMENTS = ['Culinary Arts', 'Hospitality Operations', 'Food & Beverage', 'Rooms Division', 'Management'];
 
 export function CourseManagement() {
   const { notify } = useToast();
+  const { courses, setCourses } = useDataStore();
   const [createOpen, setCreateOpen] = useState(false);
   const [archive, setArchive] = useState<Course | null>(null);
+  const [newTitle, setNewTitle] = useState('');
+  const [newCode, setNewCode] = useState('');
+  const [newDuration, setNewDuration] = useState('');
+  const [newDept, setNewDept] = useState(DEPARTMENTS[0]);
+  const [newInstructor, setNewInstructor] = useState('');
+
+  const instructors = Array.from(new Set(courses.map((c) => c.instructor)));
+
+  const createCourse = () => {
+    if (!newTitle.trim() || !newCode.trim() || !newDuration.trim()) return;
+    setCourses((prev) => [
+    ...prev,
+    {
+      id: `c-${Date.now()}`,
+      code: newCode.trim(),
+      title: newTitle.trim(),
+      instructor: newInstructor || instructors[0] || '',
+      department: newDept,
+      duration: newDuration.trim(),
+      lessonsTotal: 0,
+      lessonsCompleted: 0,
+      progress: 0,
+      status: 'not-started',
+      enrolled: 0,
+      thumbnailTone: 'slate',
+      description: '',
+      modules: []
+    }]
+    );
+    notify({
+      tone: 'success',
+      title: 'Course created',
+      message: 'The course is in draft until the instructor publishes it.'
+    });
+    setCreateOpen(false);
+    setNewTitle('');
+    setNewCode('');
+    setNewDuration('');
+    setNewDept(DEPARTMENTS[0]);
+    setNewInstructor('');
+  };
+
+  const archiveCourse = () => {
+    if (!archive) return;
+    setCourses((prev) => prev.map((c) => c.id === archive.id ? { ...c, status: 'archived' } : c));
+    notify({ tone: 'info', title: 'Course archived', message: `${archive.title} is no longer accepting enrollments.` });
+    setArchive(null);
+  };
 
   const columns: Array<Column<Course>> = [
   {
@@ -110,44 +161,45 @@ export function CourseManagement() {
             <Button variant="secondary" onClick={() => setCreateOpen(false)}>
               Cancel
             </Button>
-            <Button
-            onClick={() => {
-              setCreateOpen(false);
-              notify({
-                tone: 'success',
-                title: 'Course created',
-                message: 'The course is in draft until the instructor publishes it.'
-              });
-            }}>
-            
+            <Button onClick={createCourse} disabled={!newTitle.trim() || !newCode.trim() || !newDuration.trim()}>
               Create course
             </Button>
           </>
         }>
-        
+
         <div className="space-y-4">
           <Field label="Course title" htmlFor="c-title" required>
-            <TextInput id="c-title" placeholder="e.g. Pastry & Baking Fundamentals" />
+            <TextInput
+              id="c-title"
+              value={newTitle}
+              onChange={(e) => setNewTitle(e.target.value)}
+              placeholder="e.g. Pastry & Baking Fundamentals" />
+
           </Field>
           <div className="grid grid-cols-2 gap-4">
             <Field label="Course code" htmlFor="c-code" required>
-              <TextInput id="c-code" placeholder="PAS-130" />
+              <TextInput id="c-code" value={newCode} onChange={(e) => setNewCode(e.target.value)} placeholder="PAS-130" />
             </Field>
             <Field label="Duration" htmlFor="c-duration" required>
-              <TextInput id="c-duration" placeholder="8 weeks" />
+              <TextInput
+                id="c-duration"
+                value={newDuration}
+                onChange={(e) => setNewDuration(e.target.value)}
+                placeholder="8 weeks" />
+
             </Field>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <Field label="Department" htmlFor="c-dept" required>
-              <Select id="c-dept">
-                {Array.from(new Set(courses.map((c) => c.department))).map((d) =>
+              <Select id="c-dept" value={newDept} onChange={(e) => setNewDept(e.target.value)}>
+                {DEPARTMENTS.map((d) =>
                 <option key={d}>{d}</option>
                 )}
               </Select>
             </Field>
             <Field label="Instructor" htmlFor="c-instructor" required>
-              <Select id="c-instructor">
-                {Array.from(new Set(courses.map((c) => c.instructor))).map((i) =>
+              <Select id="c-instructor" value={newInstructor} onChange={(e) => setNewInstructor(e.target.value)}>
+                {instructors.map((i) =>
                 <option key={i}>{i}</option>
                 )}
               </Select>
@@ -166,17 +218,7 @@ export function CourseManagement() {
             <Button variant="secondary" onClick={() => setArchive(null)}>
               Cancel
             </Button>
-            <Button
-            variant="danger"
-            onClick={() => {
-              notify({
-                tone: 'info',
-                title: 'Course archived',
-                message: `${archive?.title} is no longer accepting enrollments.`
-              });
-              setArchive(null);
-            }}>
-            
+            <Button variant="danger" onClick={archiveCourse}>
               Archive course
             </Button>
           </>

@@ -3,11 +3,12 @@ import { AwardIcon, BookOpenIcon, ClockIcon, LockIcon, TargetIcon } from 'lucide
 import { PageHeader, Panel, PanelHeader } from '../../components/ui/Panel';
 import { ProgressBar } from '../../components/ui/ProgressBar';
 import { KpiCard } from '../../components/ui/KpiCard';
-import { courses } from '../../data/courses';
 import { badges } from '../../data/academics';
+import { useDataStore } from '../../data/store';
 import { cn } from '../../utils/cn';
 
 export function ProgressTracker() {
+  const { courses } = useDataStore();
   const active = courses.filter((c) => c.status !== 'archived');
   const totalLessons = active.reduce((s, c) => s + c.lessonsTotal, 0);
   const doneLessons = active.reduce((s, c) => s + c.lessonsCompleted, 0);

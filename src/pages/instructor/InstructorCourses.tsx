@@ -5,9 +5,10 @@ import { PageHeader, Panel } from '../../components/ui/Panel';
 import { Button } from '../../components/ui/Button';
 import { Badge, statusTone } from '../../components/ui/Badge';
 import { ProgressBar } from '../../components/ui/ProgressBar';
-import { courses } from '../../data/courses';
+import { useDataStore } from '../../data/store';
 
 export function InstructorCourses() {
+  const { courses } = useDataStore();
   const teaching = courses.filter((c) => c.status !== 'archived').slice(0, 4);
 
   return (

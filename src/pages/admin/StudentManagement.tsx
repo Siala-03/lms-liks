@@ -8,14 +8,22 @@ import { Select, TextInput } from '../../components/ui/Form';
 import { Modal } from '../../components/ui/Modal';
 import { useToast } from '../../components/ui/Toast';
 import { ProgressBar } from '../../components/ui/ProgressBar';
-import { students } from '../../data/people';
+import { useDataStore } from '../../data/store';
 import type { Student } from '../../types';
 
 export function StudentManagement() {
   const { notify } = useToast();
+  const { students, setStudents } = useDataStore();
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState('All statuses');
   const [edit, setEdit] = useState<Student | null>(null);
+
+  const saveEdit = () => {
+    if (!edit) return;
+    setStudents((prev) => prev.map((s) => s.id === edit.id ? edit : s));
+    notify({ tone: 'success', title: 'Student updated' });
+    setEdit(null);
+  };
 
   const rows = students.filter((s) => {
     if (status !== 'All statuses' && s.status !== status.toLowerCase().replace(' ', '-')) return false;
@@ -126,17 +134,10 @@ export function StudentManagement() {
             <Button variant="secondary" onClick={() => setEdit(null)}>
               Cancel
             </Button>
-            <Button
-            onClick={() => {
-              notify({ tone: 'success', title: 'Student updated' });
-              setEdit(null);
-            }}>
-            
-              Save changes
-            </Button>
+            <Button onClick={saveEdit}>Save changes</Button>
           </>
         }>
-        
+
         {edit ?
         <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
@@ -144,7 +145,11 @@ export function StudentManagement() {
                 <label htmlFor="edit-cohort" className="text-[13px] font-medium text-ink">
                   Cohort
                 </label>
-                <Select id="edit-cohort" defaultValue={edit.cohort}>
+                <Select
+                id="edit-cohort"
+                value={edit.cohort}
+                onChange={(e) => setEdit((prev) => prev && { ...prev, cohort: e.target.value })}>
+
                   {['24A', '24B', '24C'].map((c) =>
                 <option key={c}>{c}</option>
                 )}
@@ -154,7 +159,13 @@ export function StudentManagement() {
                 <label htmlFor="edit-status" className="text-[13px] font-medium text-ink">
                   Status
                 </label>
-                <Select id="edit-status" defaultValue={edit.status}>
+                <Select
+                id="edit-status"
+                value={edit.status}
+                onChange={(e) =>
+                setEdit((prev) => prev && { ...prev, status: e.target.value as Student['status'] })
+                }>
+
                   <option value="active">active</option>
                   <option value="on-hold">on-hold</option>
                   <option value="graduated">graduated</option>
@@ -165,7 +176,11 @@ export function StudentManagement() {
               <label htmlFor="edit-email" className="text-[13px] font-medium text-ink">
                 Email
               </label>
-              <TextInput id="edit-email" defaultValue={edit.email} />
+              <TextInput
+              id="edit-email"
+              value={edit.email}
+              onChange={(e) => setEdit((prev) => prev && { ...prev, email: e.target.value })} />
+
             </div>
           </div> :
         null}

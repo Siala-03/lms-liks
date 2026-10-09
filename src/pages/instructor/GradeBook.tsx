@@ -6,18 +6,12 @@ import { Select } from '../../components/ui/Form';
 import { Badge } from '../../components/ui/Badge';
 import { useToast } from '../../components/ui/Toast';
 import { gradeBookColumns, gradeBookStudents } from '../../data/analytics';
+import { useDataStore } from '../../data/store';
 import { cn } from '../../utils/cn';
-
-type Scores = Record<string, Record<string, number | null>>;
 
 export function GradeBook() {
   const { notify } = useToast();
-  const [scores, setScores] = useState<Scores>(() =>
-  gradeBookStudents.reduce<Scores>((acc, s) => {
-    acc[s.id] = { ...s.scores };
-    return acc;
-  }, {})
-  );
+  const { gradeBookScores: scores, setGradeBookScores: setScores } = useDataStore();
   const [dirty, setDirty] = useState(false);
   const [editing, setEditing] = useState<string | null>(null);
 

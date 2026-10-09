@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { BellIcon, LogOutIcon, MenuIcon, SearchIcon } from 'lucide-react';
 import { ROLE_LABEL, useAuth } from '../../contexts/AuthContext';
-import { notifications } from '../../data/academics';
+import { useDataStore } from '../../data/store';
 import type { User } from '../../types';
 
 export function TopBar({ user, onMobileMenu }: {user: User;onMobileMenu: () => void;}) {
   const { logout } = useAuth();
   const navigate = useNavigate();
+  const { notifications } = useDataStore();
   const [menuOpen, setMenuOpen] = useState(false);
   const unread = notifications.filter((n) => n.unread).length;
 

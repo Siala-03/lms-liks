@@ -14,7 +14,7 @@ import { Badge } from '../../components/ui/Badge';
 import { Field, Select, TextInput, Toggle } from '../../components/ui/Form';
 import { Modal } from '../../components/ui/Modal';
 import { useToast } from '../../components/ui/Toast';
-import { courses } from '../../data/courses';
+import { useDataStore } from '../../data/store';
 import { cn } from '../../utils/cn';
 import type { Lesson, Module } from '../../types';
 
@@ -34,18 +34,22 @@ const TYPE_LABEL: Record<Lesson['type'], string> = {
 
 export function CourseBuilder() {
   const { notify } = useToast();
-  const [modules, setModules] = useState<Module[]>(() =>
-  courses[0].modules.map((m) => ({ ...m, lessons: [...m.lessons] }))
-  );
+  const { courses, setCourses } = useDataStore();
+  const course = courses[0];
+  const modules = course.modules;
   const [dragging, setDragging] = useState<{moduleId: string;lessonId: string;} | null>(null);
   const [addOpen, setAddOpen] = useState<string | null>(null);
   const [newTitle, setNewTitle] = useState('');
   const [newType, setNewType] = useState<Lesson['type']>('text');
   const [published, setPublished] = useState(false);
 
+  const updateModules = (updater: (prev: Module[]) => Module[]) => {
+    setCourses((prev) => prev.map((c, i) => i === 0 ? { ...c, modules: updater(c.modules) } : c));
+  };
+
   const drop = (moduleId: string, targetLessonId: string) => {
     if (!dragging) return;
-    setModules((prev) =>
+    updateModules((prev) =>
     prev.map((m) => {
       if (m.id !== moduleId) return m;
       const from = m.lessons.findIndex((l) => l.id === dragging.lessonId);
@@ -62,7 +66,7 @@ export function CourseBuilder() {
 
   const addLesson = () => {
     if (!addOpen || !newTitle.trim()) return;
-    setModules((prev) =>
+    updateModules((prev) =>
     prev.map((m) =>
     m.id === addOpen ?
     {
@@ -88,17 +92,17 @@ export function CourseBuilder() {
   };
 
   const addModule = () => {
-    setModules((prev) => [
+    updateModules((prev) => [
     ...prev,
     { id: `mod-${Date.now()}`, title: `Untitled module ${prev.length + 1}`, published: false, lessons: [] }]
     );
   };
 
   const toggleModule = (id: string) =>
-  setModules((prev) => prev.map((m) => m.id === id ? { ...m, published: !m.published } : m));
+  updateModules((prev) => prev.map((m) => m.id === id ? { ...m, published: !m.published } : m));
 
   const removeLesson = (moduleId: string, lessonId: string) =>
-  setModules((prev) =>
+  updateModules((prev) =>
   prev.map((m) =>
   m.id === moduleId ? { ...m, lessons: m.lessons.filter((l) => l.id !== lessonId) } : m
   )

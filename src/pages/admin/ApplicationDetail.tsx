@@ -7,19 +7,22 @@ import { Badge, statusTone } from '../../components/ui/Badge';
 import { Field, Select, TextArea } from '../../components/ui/Form';
 import { Modal } from '../../components/ui/Modal';
 import { useToast } from '../../components/ui/Toast';
-import { applicationById, applications } from '../../data/people';
-import { courses } from '../../data/courses';
+import { useDataStore } from '../../data/store';
 
 export function ApplicationDetail() {
   const { applicationId } = useParams();
   const navigate = useNavigate();
   const { notify } = useToast();
-  const app = applicationById(applicationId ?? '') ?? applications[0];
+  const { applications, setApplications, courses } = useDataStore();
+  const app = applications.find((a) => a.id === applicationId) ?? applications[0];
   const [note, setNote] = useState(app.note);
   const [decision, setDecision] = useState<'approve' | 'reject' | null>(null);
 
   const confirm = () => {
     const approved = decision === 'approve';
+    setApplications((prev) =>
+    prev.map((a) => a.id === app.id ? { ...a, status: approved ? 'approved' : 'rejected' } : a)
+    );
     setDecision(null);
     notify({
       tone: approved ? 'success' : 'info',
@@ -27,6 +30,11 @@ export function ApplicationDetail() {
       message: `${app.applicant} has been notified by email.`
     });
     navigate('/admin/applications');
+  };
+
+  const saveNote = () => {
+    setApplications((prev) => prev.map((a) => a.id === app.id ? { ...a, note } : a));
+    notify({ tone: 'success', title: 'Note saved' });
   };
 
   return (
@@ -104,10 +112,7 @@ export function ApplicationDetail() {
               </Field>
             </div>
             <div className="flex justify-end border-t border-line bg-surface-secondary px-5 py-3.5">
-              <Button
-                variant="secondary"
-                onClick={() => notify({ tone: 'success', title: 'Note saved' })}>
-                
+              <Button variant="secondary" onClick={saveNote}>
                 Save note
               </Button>
             </div>

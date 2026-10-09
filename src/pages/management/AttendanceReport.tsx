@@ -9,11 +9,12 @@ import { BarChart } from '../../components/ui/Charts';
 import { ProgressBar } from '../../components/ui/ProgressBar';
 import { useToast } from '../../components/ui/Toast';
 import { attendanceByCourse } from '../../data/analytics';
-import { students } from '../../data/people';
+import { useDataStore } from '../../data/store';
 import type { Student } from '../../types';
 
 export function AttendanceReport() {
   const { notify } = useToast();
+  const { students } = useDataStore();
   const [view, setView] = useState<'By course' | 'By student'>('By course');
 
   const courseColumns: Array<Column<(typeof attendanceByCourse)[number]>> = [

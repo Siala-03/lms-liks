@@ -6,7 +6,7 @@ import { Badge } from '../../components/ui/Badge';
 import { DateInput, Field, Select, TextArea, TextInput, Toggle } from '../../components/ui/Form';
 import { Modal } from '../../components/ui/Modal';
 import { useToast } from '../../components/ui/Toast';
-import { courses } from '../../data/courses';
+import { useDataStore } from '../../data/store';
 import { cn } from '../../utils/cn';
 
 const GROUPS = [
@@ -19,6 +19,7 @@ const GROUPS = [
 
 export function NotificationComposer() {
   const { notify } = useToast();
+  const { courses } = useDataStore();
   const [channel, setChannel] = useState<'email' | 'sms'>('email');
   const [selected, setSelected] = useState<string[]>(['g-3']);
   const [subject, setSubject] = useState('');

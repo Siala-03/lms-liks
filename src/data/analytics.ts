@@ -42,40 +42,40 @@ export const gradeDistribution = [
 
 
 export const enrollmentReportRows = [
-{ id: 'er-1', student: 'Patience Aluko', course: 'HSP-210', cohort: '24C', enrolledOn: '18 Sep 2026', channel: 'Website', status: 'Active' },
-{ id: 'er-2', student: 'Samuel Etim', course: 'CUL-101', cohort: '24C', enrolledOn: '17 Sep 2026', channel: 'Walk-in', status: 'Active' },
-{ id: 'er-3', student: 'Ibukun Ajayi', course: 'BAR-180', cohort: '24C', enrolledOn: '16 Sep 2026', channel: 'Referral', status: 'Active' },
-{ id: 'er-4', student: 'Joyce Kimani', course: 'FNB-150', cohort: '24A', enrolledOn: '15 Sep 2026', channel: 'Website', status: 'Active' },
-{ id: 'er-5', student: 'Kofi Asante', course: 'HSK-120', cohort: '24B', enrolledOn: '15 Sep 2026', channel: 'Agent', status: 'Active' },
-{ id: 'er-6', student: 'Lydia Abiodun', course: 'HSP-210', cohort: '24C', enrolledOn: '12 Sep 2026', channel: 'Website', status: 'On hold' },
-{ id: 'er-7', student: 'Daniel Owusu', course: 'CUL-101', cohort: '24B', enrolledOn: '09 Sep 2026', channel: 'Referral', status: 'On hold' },
-{ id: 'er-8', student: 'Femi Balogun', course: 'FNB-150', cohort: '24A', enrolledOn: '02 Sep 2026', channel: 'Walk-in', status: 'Completed' }];
+{ id: 'er-1', student: 'Claudine Mukeshimana', course: 'HSP-210', cohort: '24C', enrolledOn: '18 Sep 2026', channel: 'Website', status: 'Active' },
+{ id: 'er-2', student: 'James Kariuki', course: 'CUL-101', cohort: '24C', enrolledOn: '17 Sep 2026', channel: 'Walk-in', status: 'Active' },
+{ id: 'er-3', student: 'Winnie Njeri', course: 'BAR-180', cohort: '24C', enrolledOn: '16 Sep 2026', channel: 'Referral', status: 'Active' },
+{ id: 'er-4', student: 'Josiane Uwimana', course: 'FNB-150', cohort: '24A', enrolledOn: '15 Sep 2026', channel: 'Website', status: 'Active' },
+{ id: 'er-5', student: 'Kevin Odhiambo', course: 'HSK-120', cohort: '24B', enrolledOn: '15 Sep 2026', channel: 'Agent', status: 'Active' },
+{ id: 'er-6', student: 'Vanessa Mugisha', course: 'HSP-210', cohort: '24C', enrolledOn: '12 Sep 2026', channel: 'Website', status: 'On hold' },
+{ id: 'er-7', student: 'David Mwangi', course: 'CUL-101', cohort: '24B', enrolledOn: '09 Sep 2026', channel: 'Referral', status: 'On hold' },
+{ id: 'er-8', student: 'Emmanuel Nkurunziza', course: 'FNB-150', cohort: '24A', enrolledOn: '02 Sep 2026', channel: 'Walk-in', status: 'Completed' }];
 
 
 export const studentPerformanceRows = [
-{ id: 'sp-1', student: 'Chidinma Eze', course: 'CUL-101', average: 92, trend: 4, band: 'Distinction' },
-{ id: 'sp-2', student: 'Amara Okonjo', course: 'CUL-101', average: 87, trend: 2, band: 'Merit' },
-{ id: 'sp-3', student: 'Ibukun Ajayi', course: 'BAR-180', average: 89, trend: 6, band: 'Merit' },
-{ id: 'sp-4', student: 'Esther Mwangi', course: 'HSP-210', average: 83, trend: -1, band: 'Merit' },
-{ id: 'sp-5', student: 'Kofi Asante', course: 'HSK-120', average: 81, trend: 3, band: 'Merit' },
-{ id: 'sp-6', student: 'Bayo Adeleke', course: 'CUL-101', average: 79, trend: -3, band: 'Credit' },
-{ id: 'sp-7', student: 'Grace Nkemdirim', course: 'FNB-150', average: 76, trend: 1, band: 'Credit' },
-{ id: 'sp-8', student: 'Hassan Suleiman', course: 'CUL-101', average: 71, trend: -2, band: 'Credit' },
-{ id: 'sp-9', student: 'Daniel Owusu', course: 'CUL-101', average: 64, trend: -7, band: 'Pass' },
-{ id: 'sp-10', student: 'Lydia Abiodun', course: 'HSP-210', average: 59, trend: -5, band: 'Fail' }];
+{ id: 'sp-1', student: 'Clarisse Ingabire', course: 'CUL-101', average: 92, trend: 4, band: 'Distinction' },
+{ id: 'sp-2', student: 'Aline Uwase', course: 'CUL-101', average: 87, trend: 2, band: 'Merit' },
+{ id: 'sp-3', student: 'Winnie Njeri', course: 'BAR-180', average: 89, trend: 6, band: 'Merit' },
+{ id: 'sp-4', student: 'Joy Wanjiku', course: 'HSP-210', average: 83, trend: -1, band: 'Merit' },
+{ id: 'sp-5', student: 'Kevin Odhiambo', course: 'HSK-120', average: 81, trend: 3, band: 'Merit' },
+{ id: 'sp-6', student: 'Brian Omondi', course: 'CUL-101', average: 79, trend: -3, band: 'Credit' },
+{ id: 'sp-7', student: 'Grace Nyamu', course: 'FNB-150', average: 76, trend: 1, band: 'Credit' },
+{ id: 'sp-8', student: 'Patrick Rukundo', course: 'CUL-101', average: 71, trend: -2, band: 'Credit' },
+{ id: 'sp-9', student: 'David Mwangi', course: 'CUL-101', average: 64, trend: -7, band: 'Pass' },
+{ id: 'sp-10', student: 'Vanessa Mugisha', course: 'HSP-210', average: 59, trend: -5, band: 'Fail' }];
 
 
 export const gradeBookStudents = [
-{ id: 's-001', name: 'Amara Okonjo', scores: { a1: 88, a2: 92, q1: 92, q2: 84, practical: 90 } },
-{ id: 's-002', name: 'Bayo Adeleke', scores: { a1: 74, a2: 81, q1: 78, q2: 80, practical: 76 } },
-{ id: 's-003', name: 'Chidinma Eze', scores: { a1: 95, a2: 91, q1: 96, q2: 88, practical: 94 } },
-{ id: 's-004', name: 'Daniel Owusu', scores: { a1: 61, a2: null, q1: 66, q2: 58, practical: 64 } },
-{ id: 's-005', name: 'Esther Mwangi', scores: { a1: 84, a2: 86, q1: 80, q2: 82, practical: 85 } },
-{ id: 's-007', name: 'Grace Nkemdirim', scores: { a1: 77, a2: 72, q1: 81, q2: 74, practical: 78 } },
-{ id: 's-008', name: 'Hassan Suleiman', scores: { a1: 70, a2: 68, q1: 74, q2: 71, practical: 72 } },
-{ id: 's-009', name: 'Ibukun Ajayi', scores: { a1: 90, a2: 88, q1: 91, q2: 86, practical: 89 } },
-{ id: 's-011', name: 'Kofi Asante', scores: { a1: 82, a2: 79, q1: 84, q2: 80, practical: 81 } },
-{ id: 's-012', name: 'Lydia Abiodun', scores: { a1: 58, a2: 61, q1: 55, q2: null, practical: 60 } }];
+{ id: 's-001', name: 'Aline Uwase', scores: { a1: 88, a2: 92, q1: 92, q2: 84, practical: 90 } },
+{ id: 's-002', name: 'Brian Omondi', scores: { a1: 74, a2: 81, q1: 78, q2: 80, practical: 76 } },
+{ id: 's-003', name: 'Clarisse Ingabire', scores: { a1: 95, a2: 91, q1: 96, q2: 88, practical: 94 } },
+{ id: 's-004', name: 'David Mwangi', scores: { a1: 61, a2: null, q1: 66, q2: 58, practical: 64 } },
+{ id: 's-005', name: 'Joy Wanjiku', scores: { a1: 84, a2: 86, q1: 80, q2: 82, practical: 85 } },
+{ id: 's-007', name: 'Grace Nyamu', scores: { a1: 77, a2: 72, q1: 81, q2: 74, practical: 78 } },
+{ id: 's-008', name: 'Patrick Rukundo', scores: { a1: 70, a2: 68, q1: 74, q2: 71, practical: 72 } },
+{ id: 's-009', name: 'Winnie Njeri', scores: { a1: 90, a2: 88, q1: 91, q2: 86, practical: 89 } },
+{ id: 's-011', name: 'Kevin Odhiambo', scores: { a1: 82, a2: 79, q1: 84, q2: 80, practical: 81 } },
+{ id: 's-012', name: 'Vanessa Mugisha', scores: { a1: 58, a2: 61, q1: 55, q2: null, practical: 60 } }];
 
 
 export const gradeBookColumns = [

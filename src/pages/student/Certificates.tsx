@@ -4,11 +4,12 @@ import { PageHeader, Panel } from '../../components/ui/Panel';
 import { CertificateCard } from '../../components/CertificateCard';
 import { useToast } from '../../components/ui/Toast';
 import { certificates } from '../../data/academics';
-import { courses } from '../../data/courses';
+import { useDataStore } from '../../data/store';
 import { ProgressBar } from '../../components/ui/ProgressBar';
 
 export function Certificates() {
   const { notify } = useToast();
+  const { courses } = useDataStore();
   const inProgress = courses.filter((c) => c.status === 'in-progress');
 
   return (

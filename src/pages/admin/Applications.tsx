@@ -8,12 +8,13 @@ import { Button } from '../../components/ui/Button';
 import { Select, TextInput } from '../../components/ui/Form';
 import { Modal } from '../../components/ui/Modal';
 import { useToast } from '../../components/ui/Toast';
-import { applications } from '../../data/people';
+import { useDataStore } from '../../data/store';
 import type { Application } from '../../types';
 
 export function Applications() {
   const navigate = useNavigate();
   const { notify } = useToast();
+  const { applications, setApplications } = useDataStore();
   const [status, setStatus] = useState('All statuses');
   const [query, setQuery] = useState('');
   const [decision, setDecision] = useState<{app: Application;approve: boolean;} | null>(null);
@@ -141,6 +142,10 @@ export function Applications() {
             variant={decision?.approve ? 'primary' : 'danger'}
             onClick={() => {
               if (!decision) return;
+              const nextStatus = decision.approve ? 'approved' : 'rejected';
+              setApplications((prev) =>
+              prev.map((a) => a.id === decision.app.id ? { ...a, status: nextStatus } : a)
+              );
               notify({
                 tone: decision.approve ? 'success' : 'info',
                 title: decision.approve ? 'Application approved' : 'Application rejected',

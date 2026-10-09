@@ -10,10 +10,10 @@ import type { Role } from '../types';
 const ROLES: Role[] = ['student', 'instructor', 'admin', 'management'];
 
 const DEMO_EMAIL: Record<Role, string> = {
-  student: 'amara.okonjo@liks.edu',
-  instructor: 'd.mensah@liks.edu',
-  admin: 'g.adeyemi@liks.edu',
-  management: 't.bakare@liks.edu'
+  student: 'aline.uwase@liks.edu',
+  instructor: 'e.habimana@liks.edu',
+  admin: 'd.achieng@liks.edu',
+  management: 'p.kamau@liks.edu'
 };
 
 export function Login() {

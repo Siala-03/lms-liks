@@ -7,10 +7,11 @@ import { Button } from '../../components/ui/Button';
 import { TextInput } from '../../components/ui/Form';
 import { ProgressBar } from '../../components/ui/ProgressBar';
 import { Modal } from '../../components/ui/Modal';
-import { students } from '../../data/people';
+import { useDataStore } from '../../data/store';
 import type { Student } from '../../types';
 
 export function StudentList() {
+  const { students } = useDataStore();
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState<Student | null>(null);
 

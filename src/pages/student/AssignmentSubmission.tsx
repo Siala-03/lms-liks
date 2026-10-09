@@ -7,7 +7,8 @@ import { Field, FileUpload, TextArea } from '../../components/ui/Form';
 import { Modal } from '../../components/ui/Modal';
 import { Badge } from '../../components/ui/Badge';
 import { useToast } from '../../components/ui/Toast';
-import { assignments, rubric } from '../../data/academics';
+import { rubric } from '../../data/academics';
+import { useDataStore } from '../../data/store';
 
 const DEADLINE = new Date('2026-09-24T17:00:00');
 
@@ -28,9 +29,10 @@ function useCountdown(target: Date) {
 
 export function AssignmentSubmission() {
   const { assignmentId } = useParams();
+  const { assignments } = useDataStore();
   const assignment = useMemo(
     () => assignments.find((a) => a.id === assignmentId) ?? assignments[0],
-    [assignmentId]
+    [assignmentId, assignments]
   );
   const { notify } = useToast();
   const countdown = useCountdown(DEADLINE);

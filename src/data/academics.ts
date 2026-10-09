@@ -66,12 +66,12 @@ export const assignments: Assignment[] = [
 
 
 export const gradingQueue = [
-{ id: 'gq-1', student: 'Bayo Adeleke', assignment: 'Sauce Emulsion Lab Report', course: 'CUL-101', submitted: '2 hours ago', late: false },
-{ id: 'gq-2', student: 'Chidinma Eze', assignment: 'Mise en Place Photo Log', course: 'CUL-101', submitted: '5 hours ago', late: false },
-{ id: 'gq-3', student: 'Daniel Owusu', assignment: 'Sauce Emulsion Lab Report', course: 'CUL-101', submitted: '1 day ago', late: true },
-{ id: 'gq-4', student: 'Esther Mwangi', assignment: 'Service Recovery Reflection', course: 'HSP-210', submitted: '1 day ago', late: false },
-{ id: 'gq-5', student: 'Hassan Suleiman', assignment: 'Mise en Place Photo Log', course: 'CUL-101', submitted: '2 days ago', late: true },
-{ id: 'gq-6', student: 'Kofi Asante', assignment: 'Wine Pairing Menu Proposal', course: 'FNB-150', submitted: '3 days ago', late: false }];
+{ id: 'gq-1', student: 'Brian Omondi', assignment: 'Sauce Emulsion Lab Report', course: 'CUL-101', submitted: '2 hours ago', late: false },
+{ id: 'gq-2', student: 'Clarisse Ingabire', assignment: 'Mise en Place Photo Log', course: 'CUL-101', submitted: '5 hours ago', late: false },
+{ id: 'gq-3', student: 'David Mwangi', assignment: 'Sauce Emulsion Lab Report', course: 'CUL-101', submitted: '1 day ago', late: true },
+{ id: 'gq-4', student: 'Joy Wanjiku', assignment: 'Service Recovery Reflection', course: 'HSP-210', submitted: '1 day ago', late: false },
+{ id: 'gq-5', student: 'Patrick Rukundo', assignment: 'Mise en Place Photo Log', course: 'CUL-101', submitted: '2 days ago', late: true },
+{ id: 'gq-6', student: 'Kevin Odhiambo', assignment: 'Wine Pairing Menu Proposal', course: 'FNB-150', submitted: '3 days ago', late: false }];
 
 
 export const quizzes: Quiz[] = [
@@ -152,16 +152,16 @@ export const attendanceSessions = [
 
 
 export const attendanceRoster: AttendanceRecord[] = [
-{ studentId: 's-001', studentName: 'Amara Okonjo', status: 'present' },
-{ studentId: 's-002', studentName: 'Bayo Adeleke', status: 'present' },
-{ studentId: 's-003', studentName: 'Chidinma Eze', status: 'present' },
-{ studentId: 's-004', studentName: 'Daniel Owusu', status: 'absent' },
-{ studentId: 's-005', studentName: 'Esther Mwangi', status: 'late' },
-{ studentId: 's-007', studentName: 'Grace Nkemdirim', status: 'present' },
-{ studentId: 's-008', studentName: 'Hassan Suleiman', status: 'late' },
-{ studentId: 's-009', studentName: 'Ibukun Ajayi', status: 'present' },
-{ studentId: 's-011', studentName: 'Kofi Asante', status: 'present' },
-{ studentId: 's-012', studentName: 'Lydia Abiodun', status: 'absent' }];
+{ studentId: 's-001', studentName: 'Aline Uwase', status: 'present' },
+{ studentId: 's-002', studentName: 'Brian Omondi', status: 'present' },
+{ studentId: 's-003', studentName: 'Clarisse Ingabire', status: 'present' },
+{ studentId: 's-004', studentName: 'David Mwangi', status: 'absent' },
+{ studentId: 's-005', studentName: 'Joy Wanjiku', status: 'late' },
+{ studentId: 's-007', studentName: 'Grace Nyamu', status: 'present' },
+{ studentId: 's-008', studentName: 'Patrick Rukundo', status: 'late' },
+{ studentId: 's-009', studentName: 'Winnie Njeri', status: 'present' },
+{ studentId: 's-011', studentName: 'Kevin Odhiambo', status: 'present' },
+{ studentId: 's-012', studentName: 'Vanessa Mugisha', status: 'absent' }];
 
 
 export const discussions: DiscussionThread[] = [
@@ -169,38 +169,38 @@ export const discussions: DiscussionThread[] = [
   id: 'd-1',
   title: 'Hollandaise keeps breaking on the induction stations — anyone else?',
   course: 'CUL-101',
-  author: 'Bayo Adeleke',
-  authorInitials: 'BA',
+  author: 'Brian Omondi',
+  authorInitials: 'BO',
   createdAt: '2 hours ago',
   pinned: false,
   replies: [
-  { id: 'dr-1', author: 'Chidinma Eze', authorInitials: 'CE', role: 'Student', createdAt: '1 hour ago', body: 'Pull the pan off the ring for ten seconds between additions. The induction residual heat is the problem, not your ratio.' },
-  { id: 'dr-2', author: 'Chef Daniel Mensah', authorInitials: 'DM', role: 'Instructor', createdAt: '42 min ago', body: 'Chidinma is right. Station 4 and 6 run hot. I have flagged them for calibration — until then work off the residual heat and keep a bowl of cold water beside you.' }]
+  { id: 'dr-1', author: 'Clarisse Ingabire', authorInitials: 'CI', role: 'Student', createdAt: '1 hour ago', body: 'Pull the pan off the ring for ten seconds between additions. The induction residual heat is the problem, not your ratio.' },
+  { id: 'dr-2', author: 'Chef Eric Habimana', authorInitials: 'EH', role: 'Instructor', createdAt: '42 min ago', body: 'Clarisse is right. Station 4 and 6 run hot. I have flagged them for calibration — until then work off the residual heat and keep a bowl of cold water beside you.' }]
 
 },
 {
   id: 'd-2',
   title: 'Read this before the timed practical — station setup expectations',
   course: 'CUL-101',
-  author: 'Chef Daniel Mensah',
-  authorInitials: 'DM',
+  author: 'Chef Eric Habimana',
+  authorInitials: 'EH',
   createdAt: '2 days ago',
   pinned: true,
   replies: [
-  { id: 'dr-3', author: 'Amara Okonjo', authorInitials: 'AO', role: 'Student', createdAt: '1 day ago', body: 'Are we allowed to pre-portion before the clock starts, or does that count as part of the assessed time?' },
-  { id: 'dr-4', author: 'Chef Daniel Mensah', authorInitials: 'DM', role: 'Instructor', createdAt: '1 day ago', body: 'Setup is untimed. The clock starts at first cut.' }]
+  { id: 'dr-3', author: 'Aline Uwase', authorInitials: 'AU', role: 'Student', createdAt: '1 day ago', body: 'Are we allowed to pre-portion before the clock starts, or does that count as part of the assessed time?' },
+  { id: 'dr-4', author: 'Chef Eric Habimana', authorInitials: 'EH', role: 'Instructor', createdAt: '1 day ago', body: 'Setup is untimed. The clock starts at first cut.' }]
 
 },
 {
   id: 'd-3',
   title: 'Study group for the Mother Sauces final — Thursday 6pm?',
   course: 'CUL-101',
-  author: 'Esther Mwangi',
-  authorInitials: 'EM',
+  author: 'Joy Wanjiku',
+  authorInitials: 'JW',
   createdAt: '4 days ago',
   pinned: false,
   replies: [
-  { id: 'dr-5', author: 'Hassan Suleiman', authorInitials: 'HS', role: 'Student', createdAt: '3 days ago', body: 'In. I can book the demo kitchen if we are more than four.' }]
+  { id: 'dr-5', author: 'Patrick Rukundo', authorInitials: 'PR', role: 'Student', createdAt: '3 days ago', body: 'In. I can book the demo kitchen if we are more than four.' }]
 
 }];
 
@@ -213,8 +213,8 @@ export const certificates: Certificate[] = [
 
 export const notifications: Notification[] = [
 { id: 'n-1', type: 'deadline', title: 'Mise en Place Practical due in 2 days', message: 'Photo log submission closes 24 Sep at 17:00. Late submissions carry a 10% penalty.', timestamp: '20 min ago', unread: true },
-{ id: 'n-2', type: 'grade', title: 'Sauce Emulsion Lab Report graded — 88/100', message: 'Chef Daniel Mensah left written feedback on your submission.', timestamp: '3 hours ago', unread: true },
-{ id: 'n-3', type: 'discussion', title: 'Chef Daniel Mensah replied to your thread', message: '"Setup is untimed. The clock starts at first cut."', timestamp: '1 day ago', unread: true },
+{ id: 'n-2', type: 'grade', title: 'Sauce Emulsion Lab Report graded — 88/100', message: 'Chef Eric Habimana left written feedback on your submission.', timestamp: '3 hours ago', unread: true },
+{ id: 'n-3', type: 'discussion', title: 'Chef Eric Habimana replied to your thread', message: '"Setup is untimed. The clock starts at first cut."', timestamp: '1 day ago', unread: true },
 { id: 'n-4', type: 'announcement', title: 'Stations 4 and 6 offline for calibration', message: 'Culinary lab stations 4 and 6 will be unavailable Wednesday morning.', timestamp: '1 day ago', unread: false },
 { id: 'n-5', type: 'grade', title: 'Peer review completed', message: 'Your peer grading of Submission #7 has been accepted and scored 18/20.', timestamp: '3 days ago', unread: false },
 { id: 'n-6', type: 'deadline', title: 'Service Recovery Reflection opens', message: 'The reflection assignment for HSP-210 is now available.', timestamp: '5 days ago', unread: false }];
@@ -236,7 +236,7 @@ export const surveyResults = [
 
 
 export const surveyComments = [
-{ id: 'sc-1', author: 'Anonymous · Cohort 24B', body: 'Chef Mensah is the reason I stayed. The demos are worth the early start.' },
+{ id: 'sc-1', author: 'Anonymous · Cohort 24B', body: 'Chef Habimana is the reason I stayed. The demos are worth the early start.' },
 { id: 'sc-2', author: 'Anonymous · Cohort 24B', body: 'Two of us had to share a station during the timed practical, which cost me time I was being graded on.' },
 { id: 'sc-3', author: 'Anonymous · Cohort 24A', body: 'More written material on emulsions would help. The video is good but hard to reference mid-service.' },
 { id: 'sc-4', author: 'Anonymous · Cohort 24C', body: 'Clear rubrics. I always knew what was being marked.' }];

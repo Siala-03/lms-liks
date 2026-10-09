@@ -14,8 +14,8 @@ import { Tabs } from '../../components/ui/Tabs';
 import { Badge, statusTone } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
 import { ProgressBar } from '../../components/ui/ProgressBar';
-import { courseById, courses } from '../../data/courses';
-import { assignments, discussions, quizzes } from '../../data/academics';
+import { quizzes } from '../../data/academics';
+import { useDataStore } from '../../data/store';
 import { cn } from '../../utils/cn';
 import type { Lesson } from '../../types';
 
@@ -30,7 +30,8 @@ const LESSON_ICON: Record<Lesson['type'], React.ComponentType<{className?: strin
 
 export function CourseDetail() {
   const { courseId } = useParams();
-  const course = courseById(courseId ?? '') ?? courses[0];
+  const { courses, discussions, assignments } = useDataStore();
+  const course = courses.find((c) => c.id === courseId) ?? courses[0];
   const [tab, setTab] = useState('Lessons');
   const allLessons = course.modules.flatMap((m) => m.lessons);
   const [activeLesson, setActiveLesson] = useState(allLessons.find((l) => !l.completed) ?? allLessons[0]);

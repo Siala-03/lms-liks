@@ -3,19 +3,20 @@ import { SearchIcon } from 'lucide-react';
 import { PageHeader } from '../../components/ui/Panel';
 import { CourseCard } from '../../components/CourseCard';
 import { Select, TextInput } from '../../components/ui/Form';
-import { courses } from '../../data/courses';
+import { useDataStore } from '../../data/store';
 import { cn } from '../../utils/cn';
 
 const FILTERS = ['All courses', 'In progress', 'Not started', 'Completed'] as const;
 
 export function CourseCatalog() {
+  const { courses } = useDataStore();
   const [filter, setFilter] = useState<(typeof FILTERS)[number]>('All courses');
   const [query, setQuery] = useState('');
   const [department, setDepartment] = useState('All departments');
 
   const departments = useMemo(
     () => ['All departments', ...Array.from(new Set(courses.map((c) => c.department)))],
-    []
+    [courses]
   );
 
   const visible = courses.filter((c) => {

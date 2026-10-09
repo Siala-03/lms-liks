@@ -5,10 +5,11 @@ import { PageHeader, Panel, PanelHeader } from '../../components/ui/Panel';
 import { KpiCard } from '../../components/ui/KpiCard';
 import { Badge, statusTone } from '../../components/ui/Badge';
 import { Button } from '../../components/ui/Button';
-import { applications, recentEnrollments, students } from '../../data/people';
-import { courses } from '../../data/courses';
+import { recentEnrollments } from '../../data/people';
+import { useDataStore } from '../../data/store';
 
 export function AdminDashboard() {
+  const { applications, students, courses } = useDataStore();
   const pending = applications.filter((a) => a.status === 'pending');
   const running = courses.filter((c) => c.status !== 'archived');
 

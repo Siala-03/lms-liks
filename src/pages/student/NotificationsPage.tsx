@@ -10,7 +10,7 @@ import {
 import { EmptyState, PageHeader, Panel } from '../../components/ui/Panel';
 import { Button } from '../../components/ui/Button';
 import { useToast } from '../../components/ui/Toast';
-import { notifications as seed } from '../../data/academics';
+import { useDataStore } from '../../data/store';
 import { cn } from '../../utils/cn';
 import type { Notification } from '../../types';
 
@@ -25,7 +25,7 @@ const FILTERS = ['All', 'Unread', 'Deadlines', 'Grades'] as const;
 
 export function NotificationsPage() {
   const { notify } = useToast();
-  const [items, setItems] = useState<Notification[]>(seed);
+  const { notifications: items, setNotifications: setItems } = useDataStore();
   const [filter, setFilter] = useState<(typeof FILTERS)[number]>('All');
 
   const visible = items.filter((n) => {

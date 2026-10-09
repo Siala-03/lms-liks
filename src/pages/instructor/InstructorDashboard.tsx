@@ -13,12 +13,13 @@ import { Button } from '../../components/ui/Button';
 import { ProgressBar } from '../../components/ui/ProgressBar';
 import { BarChart } from '../../components/ui/Charts';
 import { gradingQueue } from '../../data/academics';
-import { courses } from '../../data/courses';
 import { gradeBookStudents } from '../../data/analytics';
 import { useAuth } from '../../contexts/AuthContext';
+import { useDataStore } from '../../data/store';
 
 export function InstructorDashboard() {
   const { user } = useAuth();
+  const { courses } = useDataStore();
   const myCourses = courses.filter((c) => c.instructor === user?.name || c.code === 'CUL-101');
   const atRisk = gradeBookStudents.filter((s) => {
     const values = Object.values(s.scores).filter((v): v is number => v !== null);

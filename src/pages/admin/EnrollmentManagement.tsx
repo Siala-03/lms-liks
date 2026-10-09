@@ -7,16 +7,58 @@ import { Button } from '../../components/ui/Button';
 import { Field, Select, TextInput } from '../../components/ui/Form';
 import { Modal } from '../../components/ui/Modal';
 import { useToast } from '../../components/ui/Toast';
-import { students } from '../../data/people';
-import { courses } from '../../data/courses';
+import { useDataStore } from '../../data/store';
 import type { Student } from '../../types';
 
 export function EnrollmentManagement() {
   const { notify } = useToast();
+  const { students, setStudents, courses } = useDataStore();
   const [query, setQuery] = useState('');
   const [cohort, setCohort] = useState('All cohorts');
   const [assign, setAssign] = useState<Student | null>(null);
+  const [assignCourse, setAssignCourse] = useState('');
   const [enrollOpen, setEnrollOpen] = useState(false);
+  const [newName, setNewName] = useState('');
+  const [newEmail, setNewEmail] = useState('');
+  const [newCourse, setNewCourse] = useState('');
+  const [newCohort, setNewCohort] = useState('24C');
+
+  const activeCourses = courses.filter((c) => c.status !== 'archived');
+
+  const assignCourseToStudent = () => {
+    if (!assign) return;
+    setStudents((prev) => prev.map((s) => s.id === assign.id ? { ...s, courses: s.courses + 1 } : s));
+    notify({
+      tone: 'success',
+      title: 'Course assigned',
+      message: `${assign.name} has been added to the course roster.`
+    });
+    setAssign(null);
+    setAssignCourse('');
+  };
+
+  const enrollNewStudent = () => {
+    if (!newName.trim() || !newEmail.trim()) return;
+    setStudents((prev) => [
+    ...prev,
+    {
+      id: `s-${Date.now()}`,
+      name: newName.trim(),
+      email: newEmail.trim(),
+      cohort: newCohort,
+      courses: 1,
+      attendance: 100,
+      average: 0,
+      status: 'active'
+    }]
+    );
+    notify({ tone: 'success', title: 'Student enrolled', message: 'Welcome email sent.' });
+    setEnrollOpen(false);
+    setNewName('');
+    setNewEmail('');
+    setNewCourse('');
+    setNewCohort('24C');
+  };
 
   const cohorts = ['All cohorts', ...Array.from(new Set(students.map((s) => s.cohort)))];
   const rows = students.filter((s) => {
@@ -133,28 +175,20 @@ export function EnrollmentManagement() {
             <Button variant="secondary" onClick={() => setAssign(null)}>
               Cancel
             </Button>
-            <Button
-            onClick={() => {
-              notify({
-                tone: 'success',
-                title: 'Course assigned',
-                message: `${assign?.name} has been added to the course roster.`
-              });
-              setAssign(null);
-            }}>
-            
+            <Button onClick={assignCourseToStudent} disabled={!assignCourse}>
               Assign course
             </Button>
           </>
         }>
-        
+
         <div className="space-y-4">
           <Field label="Course" htmlFor="assign-course" required>
-            <Select id="assign-course">
-              {courses.
-              filter((c) => c.status !== 'archived').
-              map((c) =>
-              <option key={c.id}>
+            <Select id="assign-course" value={assignCourse} onChange={(e) => setAssignCourse(e.target.value)}>
+              <option value="" disabled>
+                Select a course
+              </option>
+              {activeCourses.map((c) =>
+              <option key={c.id} value={c.id}>
                     {c.code} · {c.title}
                   </option>
               )}
@@ -176,36 +210,35 @@ export function EnrollmentManagement() {
             <Button variant="secondary" onClick={() => setEnrollOpen(false)}>
               Cancel
             </Button>
-            <Button
-            onClick={() => {
-              setEnrollOpen(false);
-              notify({ tone: 'success', title: 'Student enrolled', message: 'Welcome email sent.' });
-            }}>
-            
+            <Button onClick={enrollNewStudent} disabled={!newName.trim() || !newEmail.trim()}>
               Create and enroll
             </Button>
           </>
         }>
-        
+
         <div className="space-y-4">
           <Field label="Full name" htmlFor="new-name" required>
-            <TextInput id="new-name" placeholder="e.g. Nneka Obi" />
+            <TextInput id="new-name" value={newName} onChange={(e) => setNewName(e.target.value)} placeholder="e.g. Nneka Obi" />
           </Field>
           <Field label="Email" htmlFor="new-email" required>
-            <TextInput id="new-email" type="email" placeholder="name@example.com" />
+            <TextInput
+              id="new-email"
+              type="email"
+              value={newEmail}
+              onChange={(e) => setNewEmail(e.target.value)}
+              placeholder="name@example.com" />
+
           </Field>
           <div className="grid grid-cols-2 gap-4">
             <Field label="Course" htmlFor="new-course" required>
-              <Select id="new-course">
-                {courses.
-                filter((c) => c.status !== 'archived').
-                map((c) =>
-                <option key={c.id}>{c.code}</option>
+              <Select id="new-course" value={newCourse} onChange={(e) => setNewCourse(e.target.value)}>
+                {activeCourses.map((c) =>
+                <option key={c.id} value={c.id}>{c.code}</option>
                 )}
               </Select>
             </Field>
             <Field label="Cohort" htmlFor="new-cohort" required>
-              <Select id="new-cohort">
+              <Select id="new-cohort" value={newCohort} onChange={(e) => setNewCohort(e.target.value)}>
                 <option>24C</option>
                 <option>24D</option>
                 <option>25A</option>
