@@ -4,7 +4,7 @@ import { PlusIcon } from 'lucide-react';
 import { PageHeader } from '../../components/ui/Panel';
 import { DataTable, type Column } from '../../components/ui/DataTable';
 import { Button } from '../../components/ui/Button';
-import { Field, Select, TextInput } from '../../components/ui/Form';
+import { Field, Select, TextArea, TextInput } from '../../components/ui/Form';
 import { Modal } from '../../components/ui/Modal';
 import { useToast } from '../../components/ui/Toast';
 import { useDataStore } from '../../data/store';
@@ -20,10 +20,11 @@ export function AssignmentQueue() {
   const [newCourseId, setNewCourseId] = useState(activeCourses[0]?.id ?? '');
   const [newDueDate, setNewDueDate] = useState('2026-09-30');
   const [newPoints, setNewPoints] = useState('100');
+  const [newBrief, setNewBrief] = useState('');
 
   const createAssignment = () => {
     const course = courses.find((c) => c.id === newCourseId);
-    if (!newTitle.trim() || !course) return;
+    if (!newTitle.trim() || !course || !newBrief.trim()) return;
 
     const due = new Date(`${newDueDate}T17:00:00`);
     const dayMs = 86_400_000;
@@ -41,7 +42,8 @@ export function AssignmentQueue() {
       dueDate: `${dueDateLabel}, 17:00`,
       dueIn,
       status: 'pending',
-      points: Number(newPoints) || 100
+      points: Number(newPoints) || 100,
+      brief: newBrief.trim()
     }]
     );
     notify({ tone: 'success', title: 'Assignment created', message: `${newTitle.trim()} is now visible to students.` });
@@ -49,6 +51,7 @@ export function AssignmentQueue() {
     setNewTitle('');
     setNewDueDate('2026-09-30');
     setNewPoints('100');
+    setNewBrief('');
   };
 
   const toGrade = assignments.filter((a) => a.status === 'submitted');
@@ -161,7 +164,7 @@ export function AssignmentQueue() {
             <Button variant="secondary" onClick={() => setCreateOpen(false)}>
               Cancel
             </Button>
-            <Button onClick={createAssignment} disabled={!newTitle.trim() || !newCourseId}>
+            <Button onClick={createAssignment} disabled={!newTitle.trim() || !newCourseId || !newBrief.trim()}>
               Create assignment
             </Button>
           </>
@@ -184,6 +187,20 @@ export function AssignmentQueue() {
                 </option>
               )}
             </Select>
+          </Field>
+          <Field
+            label="Brief / instructions"
+            htmlFor="as-brief"
+            required
+            hint="Shown to students on their submission page.">
+
+            <TextArea
+              id="as-brief"
+              rows={6}
+              value={newBrief}
+              onChange={(e) => setNewBrief(e.target.value)}
+              placeholder="Describe what students need to do and submit…" />
+
           </Field>
           <div className="grid grid-cols-2 gap-4">
             <Field label="Due date" htmlFor="as-due">

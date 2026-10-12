@@ -19,7 +19,10 @@ export const assignments: Assignment[] = [
   dueDate: '24 Sep 2026, 17:00',
   dueIn: '2 days',
   status: 'submitted',
-  points: 100
+  points: 100,
+  brief: `Produce a 200 g brunoise inside the twelve-minute window and document your station at four stages: setup, squared block, mid-cut, and finished yield.
+
+Upload one photograph per stage and write a short reflection covering what slowed you down and what you would change on a second attempt.`
 },
 {
   id: 'as-2',
@@ -29,7 +32,10 @@ export const assignments: Assignment[] = [
   dueDate: '26 Sep 2026, 23:59',
   dueIn: '4 days',
   status: 'pending',
-  points: 50
+  points: 50,
+  brief: `Describe a real or hypothetical service failure at the front desk and walk through how you would apply the LEARN framework (Listen, Empathise, Apologise, Resolve, Notify) to recover the guest relationship.
+
+Your reflection should be at least 800 words and reference at least one specific policy constraint you had to work within.`
 },
 {
   id: 'as-3',
@@ -40,7 +46,10 @@ export const assignments: Assignment[] = [
   dueIn: 'Closed',
   status: 'graded',
   points: 100,
-  score: 88
+  score: 88,
+  brief: `Prepare hollandaise at three different water-bath temperatures and record stability, texture and holding time for each batch.
+
+Document at least one broken-emulsion recovery attempt, and conclude with your own recommended working temperature range for a standard station.`
 },
 {
   id: 'as-4',
@@ -51,7 +60,10 @@ export const assignments: Assignment[] = [
   dueIn: 'Closed',
   status: 'graded',
   points: 100,
-  score: 94
+  score: 94,
+  brief: `Propose a five-course tasting menu with a wine pairing for each course. For every pairing, justify the choice against the dish's dominant flavour, fat content and acidity.
+
+Include at least one non-alcoholic pairing option and a short note on cost tier for each selection.`
 },
 {
   id: 'as-5',
@@ -61,7 +73,10 @@ export const assignments: Assignment[] = [
   dueDate: '20 Sep 2026, 17:00',
   dueIn: 'Closed',
   status: 'late',
-  points: 50
+  points: 50,
+  brief: `Complete the 14-point room inspection checklist on a room of your choice and submit the scored checklist alongside photographic evidence of any flagged items.
+
+Note any items that would fail a guest-ready inspection and what corrective action you would take before re-inspection.`
 }];
 
 

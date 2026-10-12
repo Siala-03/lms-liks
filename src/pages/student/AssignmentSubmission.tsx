@@ -109,14 +109,9 @@ export function AssignmentSubmission() {
           <Panel>
             <PanelHeader title="Brief" />
             <div className="max-w-2xl space-y-4 px-5 py-5 text-[15px] leading-7 text-ink">
-              <p>
-                Produce a 200 g brunoise inside the twelve-minute window and document your station at four
-                stages: setup, squared block, mid-cut, and finished yield.
-              </p>
-              <p>
-                Upload one photograph per stage and write a short reflection covering what slowed you down
-                and what you would change on a second attempt.
-              </p>
+              {assignment.brief.split('\n\n').map((para) =>
+              <p key={para.slice(0, 24)}>{para}</p>
+              )}
             </div>
           </Panel>
 

@@ -52,6 +52,7 @@ export interface Assignment {
   points: number;
   score?: number;
   feedback?: string;
+  brief: string;
 }
 
 export interface Quiz {
