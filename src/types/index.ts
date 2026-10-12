@@ -41,6 +41,11 @@ export interface Course {
   modules: Module[];
 }
 
+export interface AssignmentQuestion {
+  id: string;
+  prompt: string;
+}
+
 export interface Assignment {
   id: string;
   title: string;
@@ -53,6 +58,8 @@ export interface Assignment {
   score?: number;
   feedback?: string;
   brief: string;
+  questions?: AssignmentQuestion[];
+  attachments?: string[];
 }
 
 export interface Quiz {

@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { PlusIcon } from 'lucide-react';
+import { PlusIcon, Trash2Icon } from 'lucide-react';
 import { PageHeader } from '../../components/ui/Panel';
 import { DataTable, type Column } from '../../components/ui/DataTable';
 import { Button } from '../../components/ui/Button';
-import { Field, Select, TextArea, TextInput } from '../../components/ui/Form';
+import { Field, FileUpload, Select, TextArea, TextInput } from '../../components/ui/Form';
 import { Modal } from '../../components/ui/Modal';
 import { useToast } from '../../components/ui/Toast';
 import { useDataStore } from '../../data/store';
+import type { AssignmentQuestion } from '../../types';
 
 const REFERENCE_DATE = new Date('2026-09-22T00:00:00');
 
@@ -21,6 +22,26 @@ export function AssignmentQueue() {
   const [newDueDate, setNewDueDate] = useState('2026-09-30');
   const [newPoints, setNewPoints] = useState('100');
   const [newBrief, setNewBrief] = useState('');
+  const [newQuestions, setNewQuestions] = useState<AssignmentQuestion[]>([]);
+  const [newAttachments, setNewAttachments] = useState<string[]>([]);
+
+  const addQuestion = () =>
+  setNewQuestions((prev) => [...prev, { id: `q-${Date.now()}`, prompt: '' }]);
+
+  const updateQuestion = (id: string, prompt: string) =>
+  setNewQuestions((prev) => prev.map((q) => q.id === id ? { ...q, prompt } : q));
+
+  const removeQuestion = (id: string) =>
+  setNewQuestions((prev) => prev.filter((q) => q.id !== id));
+
+  const resetForm = () => {
+    setNewTitle('');
+    setNewDueDate('2026-09-30');
+    setNewPoints('100');
+    setNewBrief('');
+    setNewQuestions([]);
+    setNewAttachments([]);
+  };
 
   const createAssignment = () => {
     const course = courses.find((c) => c.id === newCourseId);
@@ -31,6 +52,7 @@ export function AssignmentQueue() {
     const daysLeft = Math.round((due.getTime() - REFERENCE_DATE.getTime()) / dayMs);
     const dueIn = daysLeft <= 0 ? 'Closed' : daysLeft === 1 ? '1 day' : `${daysLeft} days`;
     const dueDateLabel = due.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const questions = newQuestions.filter((q) => q.prompt.trim());
 
     setAssignments((prev) => [
     ...prev,
@@ -43,15 +65,14 @@ export function AssignmentQueue() {
       dueIn,
       status: 'pending',
       points: Number(newPoints) || 100,
-      brief: newBrief.trim()
+      brief: newBrief.trim(),
+      questions: questions.length > 0 ? questions : undefined,
+      attachments: newAttachments.length > 0 ? newAttachments : undefined
     }]
     );
     notify({ tone: 'success', title: 'Assignment created', message: `${newTitle.trim()} is now visible to students.` });
     setCreateOpen(false);
-    setNewTitle('');
-    setNewDueDate('2026-09-30');
-    setNewPoints('100');
-    setNewBrief('');
+    resetForm();
   };
 
   const toGrade = assignments.filter((a) => a.status === 'submitted');
@@ -156,12 +177,22 @@ export function AssignmentQueue() {
 
       <Modal
         open={createOpen}
-        onClose={() => setCreateOpen(false)}
+        onClose={() => {
+          setCreateOpen(false);
+          resetForm();
+        }}
         title="Create an assignment"
         description="Students in the selected course will see this on their assignments list immediately."
+        width="max-w-2xl"
         footer={
         <>
-            <Button variant="secondary" onClick={() => setCreateOpen(false)}>
+            <Button
+            variant="secondary"
+            onClick={() => {
+              setCreateOpen(false);
+              resetForm();
+            }}>
+
               Cancel
             </Button>
             <Button onClick={createAssignment} disabled={!newTitle.trim() || !newCourseId || !newBrief.trim()}>
@@ -202,6 +233,52 @@ export function AssignmentQueue() {
               placeholder="Describe what students need to do and submit…" />
 
           </Field>
+
+          <div>
+            <div className="mb-2 flex items-center justify-between">
+              <label className="text-[13px] font-medium text-ink">Questions (optional)</label>
+              <Button type="button" size="sm" variant="ghost" icon={PlusIcon} onClick={addQuestion}>
+                Add question
+              </Button>
+            </div>
+            {newQuestions.length === 0 ?
+            <p className="text-[13px] text-muted">
+                No questions added. Students will respond with a written reflection and file upload instead.
+              </p> :
+
+            <ul className="space-y-2">
+                {newQuestions.map((q, i) =>
+              <li key={q.id} className="flex items-start gap-2">
+                    <span className="mt-2.5 w-5 shrink-0 text-[13px] text-muted">{i + 1}.</span>
+                    <TextInput
+                  aria-label={`Question ${i + 1}`}
+                  value={q.prompt}
+                  onChange={(e) => updateQuestion(q.id, e.target.value)}
+                  placeholder="e.g. What would you do differently on a second attempt?" />
+
+                    <button
+                  type="button"
+                  onClick={() => removeQuestion(q.id)}
+                  aria-label={`Remove question ${i + 1}`}
+                  className="mt-2 shrink-0 text-muted transition-colors duration-150 ease-smooth hover:text-error">
+
+                      <Trash2Icon className="h-4 w-4" />
+                    </button>
+                  </li>
+              )}
+              </ul>
+            }
+          </div>
+
+          <Field label="Reference materials (optional)" hint="Shown to students alongside the brief.">
+            <FileUpload
+              files={newAttachments}
+              onAdd={() => setNewAttachments((prev) => [...prev, `reference-doc-0${prev.length + 1}.pdf`])}
+              onRemove={(name) => setNewAttachments((prev) => prev.filter((f) => f !== name))}
+              hint="PDF, DOCX, JPG or PNG up to 25 MB" />
+
+          </Field>
+
           <div className="grid grid-cols-2 gap-4">
             <Field label="Due date" htmlFor="as-due">
               <TextInput

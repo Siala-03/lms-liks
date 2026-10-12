@@ -38,13 +38,13 @@ export function Modal({ open, onClose, title, description, footer, children, wid
           role="dialog"
           aria-modal="true"
           aria-label={title}
-          className={`relative w-full ${width} rounded-xl border border-line bg-white shadow-pop`}
+          className={`relative flex max-h-[85vh] w-full ${width} flex-col rounded-xl border border-line bg-white shadow-pop`}
           initial={{ opacity: 0, scale: 0.96, y: 8 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.98, y: 4 }}
           transition={{ duration: 0.22, ease: [0.23, 1, 0.32, 1] }}>
-          
-            <div className="flex items-start justify-between gap-6 border-b border-line px-5 py-4">
+
+            <div className="flex shrink-0 items-start justify-between gap-6 border-b border-line px-5 py-4">
               <div>
                 <h2 className="text-base font-semibold text-ink">{title}</h2>
                 {description ? <p className="mt-1 text-[13px] text-muted">{description}</p> : null}
@@ -53,14 +53,14 @@ export function Modal({ open, onClose, title, description, footer, children, wid
               type="button"
               onClick={onClose}
               aria-label="Close dialog"
-              className="-mr-1 -mt-1 flex h-8 w-8 items-center justify-center rounded-md text-muted transition-colors duration-150 ease-smooth hover:bg-surface-secondary">
-              
+              className="-mr-1 -mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-muted transition-colors duration-150 ease-smooth hover:bg-surface-secondary">
+
                 <XIcon className="h-4 w-4" />
               </button>
             </div>
-            {children ? <div className="px-5 py-5">{children}</div> : null}
+            {children ? <div className="overflow-y-auto px-5 py-5">{children}</div> : null}
             {footer ?
-          <div className="flex items-center justify-end gap-2 border-t border-line bg-surface-secondary px-5 py-3.5">
+          <div className="flex shrink-0 items-center justify-end gap-2 border-t border-line bg-surface-secondary px-5 py-3.5">
                 {footer}
               </div> :
           null}

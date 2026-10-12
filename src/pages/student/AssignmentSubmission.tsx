@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { AlertTriangleIcon, ChevronLeftIcon, ClockIcon } from 'lucide-react';
+import { AlertTriangleIcon, ChevronLeftIcon, ClockIcon, FileIcon } from 'lucide-react';
 import { Panel, PanelHeader } from '../../components/ui/Panel';
 import { Button } from '../../components/ui/Button';
 import { Field, FileUpload, TextArea } from '../../components/ui/Form';
@@ -38,9 +38,11 @@ export function AssignmentSubmission() {
   const countdown = useCountdown(DEADLINE);
   const [files, setFiles] = useState<string[]>(['brunoise-station-01.jpg']);
   const [text, setText] = useState('');
+  const [answers, setAnswers] = useState<Record<string, string>>({});
   const [confirmOpen, setConfirmOpen] = useState(false);
 
   const alreadySubmitted = assignment.status === 'submitted' || assignment.status === 'graded';
+  const hasQuestions = (assignment.questions?.length ?? 0) > 0;
 
   const submit = () => {
     setAssignments((prev) =>
@@ -115,8 +117,40 @@ export function AssignmentSubmission() {
             </div>
           </Panel>
 
+          {assignment.attachments && assignment.attachments.length > 0 ?
           <Panel>
-            <PanelHeader title="Your submission" subtitle="Attach evidence, then write your reflection" />
+              <PanelHeader title="Reference materials" subtitle="Provided by your instructor" />
+              <ul className="space-y-2 px-5 py-5">
+                {assignment.attachments.map((f) =>
+              <li
+                key={f}
+                className="flex items-center justify-between rounded-md border border-line px-3 py-2.5 text-[13px]">
+
+                    <span className="inline-flex items-center gap-2 truncate text-ink">
+                      <FileIcon className="h-3.5 w-3.5 shrink-0 text-muted" />
+                      {f}
+                    </span>
+                    <button
+                  type="button"
+                  onClick={() => notify({ tone: 'info', title: 'Download started', message: f })}
+                  className="shrink-0 text-xs font-medium text-primary hover:underline">
+
+                      Open
+                    </button>
+                  </li>
+              )}
+              </ul>
+            </Panel> :
+          null}
+
+          <Panel>
+            <PanelHeader
+              title="Your submission"
+              subtitle={
+              hasQuestions ?
+              'Attach evidence, then answer each question' :
+              'Attach evidence, then write your reflection'} />
+
             <div className="space-y-5 px-5 py-5">
               <Field label="Stage photographs" hint="Four images expected · JPG or PNG up to 25 MB each">
                 <FileUpload
@@ -124,22 +158,36 @@ export function AssignmentSubmission() {
                   onAdd={() => setFiles((prev) => [...prev, `station-photo-0${prev.length + 1}.jpg`])}
                   onRemove={(name) => setFiles((prev) => prev.filter((f) => f !== name))}
                   hint="JPG or PNG up to 25 MB each" />
-                
+
               </Field>
+
+              {hasQuestions ?
+              assignment.questions!.map((q, i) =>
+              <Field key={q.id} label={`${i + 1}. ${q.prompt}`} htmlFor={`answer-${q.id}`}>
+                  <TextArea
+                  id={`answer-${q.id}`}
+                  rows={4}
+                  value={answers[q.id] ?? ''}
+                  onChange={(e) => setAnswers((prev) => ({ ...prev, [q.id]: e.target.value }))}
+                  placeholder="Your answer…" />
+
+                </Field>
+              ) :
 
               <Field
                 label="Written reflection"
                 htmlFor="reflection"
                 hint={`${text.trim() ? text.trim().split(/\s+/).length : 0} of 300 words minimum`}>
-                
-                <TextArea
+
+                  <TextArea
                   id="reflection"
                   rows={8}
                   value={text}
                   onChange={(e) => setText(e.target.value)}
                   placeholder="What slowed you down, and what would you change on a second attempt?" />
-                
-              </Field>
+
+                </Field>
+              }
             </div>
             <div className="flex items-center justify-between gap-3 border-t border-line bg-surface-secondary px-5 py-3.5">
               <p className="text-[13px] text-muted">
@@ -221,9 +269,11 @@ export function AssignmentSubmission() {
             <span className="font-medium">{files.length}</span>
           </li>
           <li className="flex justify-between border-b border-line pb-2">
-            <span className="text-muted">Reflection length</span>
+            <span className="text-muted">{hasQuestions ? 'Questions answered' : 'Reflection length'}</span>
             <span className="font-medium">
-              {text.trim() ? text.trim().split(/\s+/).length : 0} words
+              {hasQuestions ?
+              `${assignment.questions!.filter((q) => answers[q.id]?.trim()).length} of ${assignment.questions!.length}` :
+              `${text.trim() ? text.trim().split(/\s+/).length : 0} words`}
             </span>
           </li>
           <li className="flex justify-between">
